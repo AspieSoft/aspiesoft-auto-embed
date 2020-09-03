@@ -2,7 +2,7 @@
 
 Easily Embed Dynamic Youtube Videos Simply By Pasting The Url.
 
-Note: This plugin depends on jQuery
+Note: Requires jQuery To Run
 
 This plugin does most of the work client side, and waits for the page to finish loading so embeds do not slow down your site.
 Shortcodes are not needed (but are available), just add a clickable link to the youtube video, and the plugin will find all the youtube.com and youtu.be links, and replace them with an embed.
@@ -10,7 +10,13 @@ Shortcodes are not needed (but are available), just add a clickable link to the 
 You know how sites like facebook and discord let you paste a youtube url, and an embed of the video shows up?
 This plugin works kind of like that.
 
-## Installation
+## CDN Installation
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed/embed.js"></script>
+```
+
+## Wordpress Installation
 
 1. Upload plugin to the /wp-content/plugins
 2. Activate the plugin through the "Plugins" menu in WordPress
@@ -24,7 +30,7 @@ Just put a clickable link to the video/playlist/channel, and the plugin will do 
 
 ---
 
-### How to use the shortcode
+### How to use the wordpress shortcode
 
 ```WordPress
 [auto-embed
