@@ -24,8 +24,8 @@ SOFTWARE.
 
 ;(function($){
 
-  if(!$('link[href="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed/embed.css"]').length > 0){
-    $('<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed/embed.css">').appendTo("head");
+  if(!$('link[href="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed/cdn/embed.css"]').length > 0){
+    $('<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed/cdn/embed.css">').appendTo("head");
   }
 
   defaultEmbedOptions = {
@@ -63,7 +63,7 @@ SOFTWARE.
 
     return obj1;
   }
-  
+
   if(typeof AspieSoftAutoEmbedOptions === 'object'){
     defaultEmbedOptions = mergeObj(defaultEmbedOptions, AspieSoftAutoEmbedOptions);
   }

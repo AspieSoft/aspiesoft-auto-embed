@@ -13,8 +13,10 @@ This plugin works kind of like that.
 ## CDN Installation
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed/embed.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed/cdn/embed.js"></script>
 ```
+
+---
 
 ## Wordpress Installation
 
@@ -44,6 +46,23 @@ Just put a clickable link to the video/playlist/channel, and the plugin will do 
   live="<optional embed live video> default: false"
   popular="<optional embed popular uploads playlist> default: false"
 ]
+```
+
+---
+
+### How to set default options for cdn (not wordpress)
+```javascript
+// add this before the cdn script is loaded
+AspieSoftAutoEmbedOptions = {
+  'width': '100%',
+  'min-width': '300px',
+  'max-width': '2500px',
+  'ratio': '16:9',
+  'auto': '0',
+  'mute': '0',
+  'popular': '0',
+  'live': '0',
+};
 ```
 
 ---
