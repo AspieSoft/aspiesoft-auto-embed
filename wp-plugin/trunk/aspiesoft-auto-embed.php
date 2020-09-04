@@ -6,7 +6,7 @@
 Plugin Name: AspieSoft Auto YouTube Embed
 Plugin URI: https://www.wordpress.org/plugins/aspiesoft-auto-embed
 Description: Easily Embed Dynamic Youtube Videos Simply By Pasting The Url.
-Version: 1.0.1
+Version: 1.0.2
 Author: AspieSoft
 Author URI: https://www.aspiesoft.com
 License: GPLv2 or later
@@ -53,6 +53,7 @@ if(!class_exists('AspieSoft_AutoEmbed')){
     public $plugin;
 
     private static $func;
+    private static $options;
 
     function __construct(){
       $this->pluginName = plugin_basename(__FILE__);
@@ -102,13 +103,14 @@ if(!class_exists('AspieSoft_AutoEmbed')){
       global $aspieSoft_Functions_v1;
       self::$func = $aspieSoft_Functions_v1;
 
-      $options = self::$func::options($this->plugin);
+      self::$options = self::$func::options($this->plugin);
 
       add_action('wp_enqueue_scripts', array($this, 'enqueue'));
+      add_action('admin_enqueue_scripts', array($this, 'admin_enqueue'));
       add_action('admin_menu', array($this, 'add_admin_pages'));
       add_filter("plugin_action_links_$this->pluginName", array($this, 'settings_link'));
 
-      if($options['get']('disableWpEmbed', false, true)){
+      if(self::$options['get']('disableWpEmbed', false, true)){
         add_filter('tiny_mce_plugins', array($this, 'disableWpEmbedEditor'));
         add_action('init', array($this, 'disableWpEmbedInit'), 9999);
         add_action('wp_footer', array($this, 'disableWpEmbedFooter'));
@@ -162,17 +164,16 @@ if(!class_exists('AspieSoft_AutoEmbed')){
       }
 
       // get option list from src directory
-      $options = self::$func::options($this->plugin);
       $optionList = array();
       require_once(plugin_dir_path(__FILE__).'src/settings.php');
       $pName = str_replace('-', '_', sanitize_html_class($this->plugin['pluginName']));
       if(class_exists('AspieSoft_'.$pName.'_Settings')){
         $optionList = ${'aspieSoft_'.$pName.'_Settings'}->getOptionList();
       }
-      $optionList = $options['getList']($optionList);
+      $optionList = self::$options['getList']($optionList);
 
-      $options['setList']($optionList, false, true, true);
-      $options['setList']($optionList, true, true, true);
+      self::$options['setList']($optionList, false, true, true);
+      self::$options['setList']($optionList, true, true, true);
     }
 
     function disableOptionsAutoload(){
@@ -187,17 +188,22 @@ if(!class_exists('AspieSoft_AutoEmbed')){
       }
 
       // get option list from src directory
-      $options = self::$func::options($this->plugin);
       $optionList = array();
       require_once(plugin_dir_path(__FILE__).'src/settings.php');
       $pName = str_replace('-', '_', sanitize_html_class($this->plugin['pluginName']));
       if(class_exists('AspieSoft_'.$pName.'_Settings')){
         $optionList = ${'aspieSoft_'.$pName.'_Settings'}->getOptionList();
       }
-      $optionList = $options['getList']($optionList);
+      $optionList = self::$options['getList']($optionList);
 
-      $options['setList']($optionList, false, false, true);
-      $options['setList']($optionList, true, false, true);
+      self::$options['setList']($optionList, false, false, true);
+      self::$options['setList']($optionList, true, false, true);
+    }
+
+    function admin_enqueue(){
+      if(is_admin() && self::$options['get']('enableEditorAutoUrl', false, true)){
+        wp_enqueue_script('AspieSoft_Editor_AutoUrl', plugins_url('/assets/editor-auto-url.js', __FILE__), array('jquery'), '1.0', true);
+      }
     }
 
     function enqueue(){

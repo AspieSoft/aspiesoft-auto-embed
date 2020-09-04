@@ -16,6 +16,7 @@ if(!class_exists('AspieSoft_AutoEmbed_Settings')){
     public function getOptionList(){
       $optionList = array(
         'disableWpEmbed' => array('label' => 'Disable Wp-Embed', 'default' => 'false', 'form' => '[check][label][br]', 'type' => 'bool'),
+        'enableEditorAutoUrl' => array('label' => 'Automatically Make URLs Clickable In Page Editor', 'default' => 'false', 'form' => '[check][label][br][br]', 'type' => 'bool'),
         'altShortcode' => array('label' => 'Alternate Shortcode Name', 'default' => '', 'form' => '[label][text][br]'),
         'embedWidth' => array('label' => 'Width', 'default' => '100', 'form' => '[label][number{width:80px;}]%[br]', 'format' => '%s%'),
         'embedWidthMin' => array('label' => 'Min Width', 'default' => '300', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
