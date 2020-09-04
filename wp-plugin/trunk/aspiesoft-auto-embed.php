@@ -61,6 +61,8 @@ if(!class_exists('AspieSoft_AutoEmbed')){
     function start(){
       // run main part of the plugin on frontend only
       // also helps with testing the plugin in development, because the backend won't crash if the main plugin file has php errors
+      //todo: add visual of embed to frontend (may also add widget/button if possible)
+      //todo: embed images
       if(!is_admin()){
         require_once(plugin_dir_path(__FILE__).'src/main.php');
         $pName = str_replace('-', '_', sanitize_html_class($this->plugin['pluginName']));
