@@ -6,7 +6,7 @@
 Plugin Name: AspieSoft Auto YouTube Embed
 Plugin URI: https://www.wordpress.org/plugins/aspiesoft-auto-embed
 Description: Easily Embed Dynamic Youtube Videos Simply By Pasting The Url.
-Version: 1.0
+Version: 1.0.1
 Author: AspieSoft
 Author URI: https://www.aspiesoft.com
 License: GPLv2 or later
