@@ -15,6 +15,7 @@ if(!class_exists('AspieSoft_AutoEmbed_Settings')){
     // settings for admin page (client side assets/settings.js file reads this, and loads html inputs from it)
     public function getOptionList(){
       $optionList = array(
+        'disableWpEmbed' => array('label' => 'Disable Wp-Embed', 'default' => 'false', 'form' => '[check][label][br]', 'type' => 'bool'),
         'altShortcode' => array('label' => 'Alternate Shortcode Name', 'default' => '', 'form' => '[label][text][br]'),
         'embedWidth' => array('label' => 'Width', 'default' => '100', 'form' => '[label][number{width:80px;}]%[br]', 'format' => '%s%'),
         'embedWidthMin' => array('label' => 'Min Width', 'default' => '300', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),

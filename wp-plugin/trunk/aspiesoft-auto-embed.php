@@ -100,9 +100,34 @@ if(!class_exists('AspieSoft_AutoEmbed')){
       global $aspieSoft_Functions_v1;
       self::$func = $aspieSoft_Functions_v1;
 
+      $options = self::$func::options($this->plugin);
+
       add_action('wp_enqueue_scripts', array($this, 'enqueue'));
       add_action('admin_menu', array($this, 'add_admin_pages'));
       add_filter("plugin_action_links_$this->pluginName", array($this, 'settings_link'));
+
+      if($options['get']('disableWpEmbed', false, true)){
+        add_filter('tiny_mce_plugins', array($this, 'disableWpEmbedEditor'));
+        add_action('init', array($this, 'disableWpEmbedInit'), 9999);
+        add_action('wp_footer', array($this, 'disableWpEmbedFooter'));
+      }
+    }
+
+    function disableWpEmbedEditor($plugins){
+      return array_diff($plugins, array('wpview'));
+    }
+
+    function disableWpEmbedInit(){
+      remove_action('rest_api_init', 'wp_oembed_register_route');
+      remove_filter('oembed_dataparse', 'wp_filter_oembed_result', 10);
+      remove_action('wp_head', 'wp_oembed_add_discovery_links');
+      remove_action('wp_head', 'wp_oembed_add_host_js');
+    }
+
+    function disableWpEmbedFooter(){
+      wp_dequeue_script('wp-embed');
+      remove_action('wp_enqueue_scripts', 'wp-embed', 9999);
+      remove_filter('the_content', array($GLOBALS['wp_embed'], 'autoembed'), 8);
     }
 
     function settings_link($links){
