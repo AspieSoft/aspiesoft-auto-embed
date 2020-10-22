@@ -50,8 +50,19 @@ if(!class_exists('AspieSoft_AutoEmbed_Main')){
         'popular' => false,
       ), $atts);
 
-      foreach ($attr as $k => $v) {
-        $attr[sanitize_key($k)] = esc_html(sanitize_text_field($v));
+	  foreach($attr as $k => $v){
+        $vType = gettype($v);
+        if($vType === 'string'){
+          $attr[sanitize_key($k)] = esc_html(sanitize_text_field($v));
+        }else if($vType === 'boolean'){
+          $attr[sanitize_key($k)] = !!$v;
+        }else if($vType === 'integer'){
+          $attr[sanitize_key($k)] = intval($v);
+        }else if($vType === 'double'){
+          $attr[sanitize_key($k)] = floatval($v);
+        }else{
+          $attr[sanitize_key($k)] = null;
+        }
       }
 
       $url = $attr['url'];
