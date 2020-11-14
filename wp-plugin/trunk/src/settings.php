@@ -29,6 +29,7 @@ if(!class_exists('AspieSoft_AutoEmbed_Settings')){
           'popular' => 'Popular Uploads',
           'live' => 'Live Stream',
         )),
+        'jsdelivr' => array('label' => 'Use jsdelivr.net (recommended)', 'default' => 'false', 'form' => '[check][label][br]', 'type' => 'bool'),
       );
       return $optionList;
     }

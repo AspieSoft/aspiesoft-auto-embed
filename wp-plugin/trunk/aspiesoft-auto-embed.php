@@ -6,7 +6,7 @@
 Plugin Name: AspieSoft Auto YouTube Embed
 Plugin URI: https://www.wordpress.org/plugins/aspiesoft-auto-embed
 Description: Easily Embed Dynamic Youtube Videos Simply By Pasting The Url.
-Version: 1.0.2
+Version: 1.0.3
 Author: AspieSoft
 Author URI: https://www.aspiesoft.com
 License: GPLv2 or later
@@ -49,11 +49,16 @@ if(!class_exists('AspieSoft_AutoEmbed')){
 
   class AspieSoft_AutoEmbed{
 
+    public $githubURL = 'https://github.com/AspieSoft/aspiesoft-auto-embed';
+    public $jsdelivrURL = 'https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed';
+
     public $pluginName;
     public $plugin;
 
     private static $func;
     private static $options;
+
+    private $useJSDelivr;
 
     function __construct(){
       $this->pluginName = plugin_basename(__FILE__);
@@ -104,6 +109,8 @@ if(!class_exists('AspieSoft_AutoEmbed')){
       self::$func = $aspieSoft_Functions_v1;
 
       self::$options = self::$func::options($this->plugin);
+
+      $this->useJSDelivr = self::$options['get']('jsdelivr', false, true);
 
       add_action('wp_enqueue_scripts', array($this, 'enqueue'));
       add_action('admin_enqueue_scripts', array($this, 'admin_enqueue'));
@@ -239,7 +246,7 @@ if(!class_exists('AspieSoft_AutoEmbed')){
         $assets = scandir($assetsDir);
         foreach($assets as $asset){
           if(self::$func::endsWith($asset, '.js')){
-            wp_enqueue_script($this->plugin['setting'].'_'.$asset, plugins_url('/src/assets/'.$asset, __FILE__), array('jquery'), $this->plugin['version'], true);
+            wp_enqueue_script($this->plugin['setting'].'_'.$asset, $this->pluginAssetPath($asset), array('jquery'), $this->plugin['version'], true);
 
             if($addInlineSettingsScript){
               $addInlineSettingsScript = false;
@@ -247,7 +254,7 @@ if(!class_exists('AspieSoft_AutoEmbed')){
             }
 
           }else if(self::$func::endsWith($asset, '.css')){
-            wp_enqueue_style($this->plugin['setting'].'_'.$asset, plugins_url('/src/assets/'.$asset, __FILE__), array(), $this->plugin['version']);
+            wp_enqueue_style($this->plugin['setting'].'_'.$asset, $this->pluginAssetPath($asset), array(), $this->plugin['version']);
 
             if($addInlineSettingsStyle){
               $addInlineSettingsStyle = $this->plugin['setting'].'_'.$asset;
@@ -262,6 +269,16 @@ if(!class_exists('AspieSoft_AutoEmbed')){
 
       }
 
+    }
+
+    function pluginAssetPath($path){
+      if(substr($path, 0, 1) !== '/'){
+        $path = '/'.$path;
+      }
+      if($this->useJSDelivr){
+        return $this->jsdelivrURL.'@'.$this->plugin['version'].'/wp-plugin/trunk/src/assets'.$path;
+      }
+      return plugins_url('/src/assets'.$path, __FILE__);
     }
 
   }

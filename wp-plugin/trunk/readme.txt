@@ -60,10 +60,16 @@ Add "?min-width=(insert min width)&max-width=(insert max width)" to the url
 
 == Changelog ==
 
+= 1.0.3 =
+Added option to load scripts and styles from jsdelivr.net (can improve performance)
+
 = 1.0 =
 Initial Commit
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+Added option to load scripts and styles from jsdelivr.net (can improve performance)
 
 = 1.0 =
 Initial Commit
