@@ -163,8 +163,8 @@ if(!class_exists('AspieSoft_Settings')){
 
       // load common functions
       require_once(plugin_dir_path(__FILE__).'../functions.php');
-      global $aspieSoft_Functions_v1;
-      self::$func = $aspieSoft_Functions_v1;
+      global $aspieSoft_Functions_v1_1;
+      self::$func = $aspieSoft_Functions_v1_1;
     }
 
   }

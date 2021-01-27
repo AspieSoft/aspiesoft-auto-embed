@@ -32,7 +32,7 @@
   // add inputs for settings to form
 
   function buildInput(name, inputType, style, value, defaultValue, type, optionsList){
-	
+  
     if(value || value === 0 || value === false){value = value.toString();}else{value = '';}
     if(defaultValue || defaultValue === 0 || defaultValue === false){defaultValue = defaultValue.toString();}else{defaultValue = '';}
     

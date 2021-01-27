@@ -24,23 +24,23 @@ SOFTWARE.
 
 ;(function($){
 
-	$(document).ready(function(){
-		$(document).on('paste', 'div[contenteditable="true"]', replaceHttpTextWithUrl);
-		$(document).on('paste', '#content.wp-editor-area', replaceHttpTextWithUrl);
-		setTimeout(function(){
-			$('#content_ifr').contents().on('paste', 'body[contenteditable="true"]', replaceHttpTextWithUrl);
-		}, 1000);
-	});
+  $(document).ready(function(){
+    $(document).on('paste', 'div[contenteditable="true"]', replaceHttpTextWithUrl);
+    $(document).on('paste', '#content.wp-editor-area', replaceHttpTextWithUrl);
+    setTimeout(function(){
+      $('#content_ifr').contents().on('paste', 'body[contenteditable="true"]', replaceHttpTextWithUrl);
+    }, 1000);
+  });
 
   function replaceHttpTextWithUrl(e){
     let document = e.delegateTarget;
 
     let text = (e.originalEvent || e).clipboardData;
     if(!text){
-			text = window.clipboardData.getData('text') || '';
+      text = window.clipboardData.getData('text') || '';
 
       if(text && text !== '' && text.match(/^https?:\/\/(?:[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]+)+[\-A-Za-z0-9+&@#\/%=~_|]+[/?]?/)){
-				e.preventDefault();
+        e.preventDefault();
 
         if(e.target.tagName === 'TEXTAREA'){
 
@@ -53,7 +53,7 @@ SOFTWARE.
           }else{
             text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
             document.section.createRange().pasteText('<a href="'+text+'">'+text+'</a>');
-					}
+          }
 
         }else if(window.getSelection){
           text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -65,10 +65,10 @@ SOFTWARE.
           text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
           document.section.createRange().pasteHTML('<a href="'+text+'">'+text+'</a>');
         }
-			}
+      }
 
     }else{
-			text = text.getData('text/plain') || '';
+      text = text.getData('text/plain') || '';
 
       if(text && text !== '' && text.match(/^https?:\/\/(?:[\-A-Za-z0-9+&@#\/%?=~_|!:,.;]+)+[\-A-Za-z0-9+&@#\/%=~_|]+[/?]?/)){
         e.preventDefault();
@@ -78,9 +78,9 @@ SOFTWARE.
           text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
           document.execCommand('insertHTML', false, '<a href="'+text+'">'+text+'</a>');
         }
-			}
+      }
 
-		}
+    }
 
   }
 

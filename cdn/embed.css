@@ -1,4 +1,4 @@
-.aspiesoft-video-embed {
+.aspiesoft-embed {
   width: 100%;
   min-width: 300px;
   max-width: 2500px;
@@ -6,7 +6,7 @@
   box-sizing: border-box;
   padding: 0;
   overflow: hidden;
-  display: inline-block;
+  /*display: inline-block;*/
   border-radius: 20px;
   background: #2b2b2b;
   box-shadow: 0 0 5px #121212;
@@ -14,7 +14,7 @@
   display: block;
 }
 
-.aspiesoft-video-embed iframe {
+.aspiesoft-embed iframe {
   width: 100%;
   height: 100%;
   margin: 0;

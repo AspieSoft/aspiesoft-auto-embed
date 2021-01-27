@@ -20,8 +20,8 @@ if(!class_exists('AspieSoft_AutoEmbed_AssetSettings')){
     public function init($pluginData){
       $this->plugin = $pluginData;
       require_once(plugin_dir_path(__FILE__).'../../functions.php');
-      global $aspieSoft_Functions_v1;
-      self::$func = $aspieSoft_Functions_v1;
+      global $aspieSoft_Functions_v1_1;
+      self::$func = $aspieSoft_Functions_v1_1;
     }
 
     public function addScript($scriptBefore){
@@ -30,7 +30,7 @@ if(!class_exists('AspieSoft_AutoEmbed_AssetSettings')){
       $options = self::$func::options($this->plugin);
 
       $opts = array(
-      	'width' => $options['get']('embedWidth'),
+        'width' => $options['get']('embedWidth'),
         'min-width' => $options['get']('embedWidthMin'),
         'max-width' => $options['get']('embedWidthMax'),
         'ratio' => $options['get']('embedRatio'),

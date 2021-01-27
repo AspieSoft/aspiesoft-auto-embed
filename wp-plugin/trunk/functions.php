@@ -5,9 +5,9 @@ if(!defined('ABSPATH')){
   die('404 Not Found');
 }
 
-if(!class_exists('AspieSoft_Functions_v1')){
+if(!class_exists('AspieSoft_Functions_v1_1')){
 
-  class AspieSoft_Functions_v1{
+  class AspieSoft_Functions_v1_1{
 
     public static function startsWith($haystack, $needle){
       return substr_compare($haystack, $needle, 0, strlen($needle)) === 0;
@@ -28,6 +28,24 @@ if(!class_exists('AspieSoft_Functions_v1')){
         $value = esc_html(sanitize_text_field($value));
       }
       return $value;
+    }
+
+    public static function cleanShortcodeAtts($attr){
+      foreach($attr as $k => $v){
+        $vType = gettype($v);
+        if($vType === 'string'){
+          $attr[sanitize_key($k)] = esc_html(sanitize_text_field($v));
+        }else if($vType === 'boolean'){
+          $attr[sanitize_key($k)] = !!$v;
+        }else if($vType === 'integer'){
+          $attr[sanitize_key($k)] = intval($v);
+        }else if($vType === 'double'){
+          $attr[sanitize_key($k)] = floatval($v);
+        }else{
+          $attr[sanitize_key($k)] = null;
+        }
+      }
+      return $attr;
     }
 
     // options
@@ -162,7 +180,7 @@ if(!class_exists('AspieSoft_Functions_v1')){
 
   }
 
-  global $aspieSoft_Functions_v1;
-  $aspieSoft_Functions_v1 = new AspieSoft_Functions_v1();
+  global $aspieSoft_Functions_v1_1;
+  $aspieSoft_Functions_v1_1 = new AspieSoft_Functions_v1_1();
 
 }

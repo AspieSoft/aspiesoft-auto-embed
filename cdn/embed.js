@@ -24,10 +24,6 @@ SOFTWARE.
 
 ;(function($){
 
-  if(!$('link[href="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed/cdn/embed.css"]').length > 0){
-    $('<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed/cdn/embed.css">').appendTo("head");
-  }
-
   defaultEmbedOptions = {
     'width': '100%',
     'min-width': '300px',
@@ -63,7 +59,7 @@ SOFTWARE.
 
     return obj1;
   }
-
+  
   if(typeof AspieSoftAutoEmbedOptions === 'object'){
     defaultEmbedOptions = mergeObj(defaultEmbedOptions, AspieSoftAutoEmbedOptions);
   }
@@ -86,6 +82,23 @@ SOFTWARE.
       if(!url || url.trim() === ''){
         return;
       }
+
+      let title = $(this).text();
+      if(!title || title.trim() === '' || title === url){
+        title = $(this).attr('title');
+        if(!title || title.trim() === ''){
+          title = undefined;
+        }
+      }
+
+      let description = $(this).attr('description');
+      if(!description || description.trim() === ''){
+        description = $(this).attr('desc');
+        if(!description || description.trim() === ''){
+          description = undefined;
+        }
+      }
+      
       
       url = decodeURIComponent(url);
 
@@ -153,11 +166,40 @@ SOFTWARE.
         youtubeQueryAttrs += '&mute=1';
       }
 
+      if(!title && (data.attrs.title || data.attrs.name)){
+        title = data.attrs.title || data.attrs.name;
+      }
+
+      if(!description && (data.attrs.description || data.attrs.desc)){
+        description = data.attrs.description || data.attrs.desc;
+      }
+
       styles += '"';
 
-      data.url = data.url.replace(/\\?"/g, '\\"')+youtubeQueryAttrs;
-      let iframe = $('<div class="aspiesoft-video-embed" doing-init-animation'+attrs+styles+'><iframe style="opacity: 0;" src="'+data.url+'" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>').insertAfter(this);
+      let iframe = undefined;
+      if(data.embedType === 'video'){
+        data.url = data.url.replace(/\\?"/g, '\\"')+youtubeQueryAttrs;
+        iframe = $('<div class="aspiesoft-embed" doing-init-animation'+attrs+styles+'><iframe class="aspiesoft-embed-content" style="opacity: 0;" src="'+data.url+'" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>').insertAfter(this);
+      }else if(data.embedType === 'embed'){
+        iframe = $('<div class="aspiesoft-embed" doing-init-animation'+attrs+styles+'><iframe class="aspiesoft-embed-content" style="opacity: 0;" src="'+data.url+'" frameborder="0" allowfullscreen></iframe></div>').insertAfter(this);
+        iframe.css('border-radius', '5px');
+      }else if(data.embedType === 'image'){
+        iframe = $('<div class="aspiesoft-embed" doing-init-animation'+attrs+styles+'><img class="aspiesoft-embed-content" style="opacity: 0;" src="'+data.url+'"></div>').insertAfter(this);
+      }
+
+      if(!iframe){
+        return;
+      }
+      
       $(this).remove();
+
+      if(title){
+        iframe.before('<h2>'+(title.replace(/\</g, '&lt;').replace(/\>/g, '&gt;'))+'</h2><br>');
+      }
+
+      if(description){
+        iframe.after('<br><h3>'+(description.replace(/\</g, '&lt;').replace(/\>/g, '&gt;'))+'</h3>');
+      }
 
       let newHeight = getRatioHeight(iframe);
       iframe.css('transition', 'none');
@@ -168,7 +210,7 @@ SOFTWARE.
         iframe.css('transition', '');
       }, 10);
 
-      $('iframe', iframe).load('ready', function(){
+      $('.aspiesoft-embed-content', iframe).on('load', function(){
         $(this).css('opacity', 1);
       });
 
@@ -182,7 +224,7 @@ SOFTWARE.
   }
 
   function fixEmbedRatio(){
-    $('.aspiesoft-video-embed').each(function(){
+    $('.aspiesoft-embed').each(function(){
       if(this.hasAttribute('doing-init-animation')){
         return;
       }
@@ -193,7 +235,7 @@ SOFTWARE.
       }
     });
   }
-  
+
   function getRatioHeight(elm){
     let width = $(elm).width();
     let ratio = $(elm).attr('ratio');
@@ -208,19 +250,18 @@ SOFTWARE.
   function getEmbedUrl(url){
     let attrs = undefined;
     let queryObject = undefined;
-
-    //todo: add search option to plugin (use ?search do search for the video id, or value for search)
-    // https://www.youtube.com/embed/?listType=search&list=AspieSoft
+    let embedType = undefined;
 
     url.replace(/^(?:https?:\/\/|)(?:www\.|)(.*?)(?:\/(.*?)|)(?:\?(.*?)|)$/i, function(_, domain, page, query){
       query = queryObj(query);
       queryObject = query;
       if(domain === 'youtu.be'){
+        embedType = 'video';
         page = page.replace(/^(.*?)\/.*/, '$1');
         if(page.startsWith('UC') || page.startsWith('UU') || page.startsWith('PU')){
           if((query && query.popular && query.popular !== '0') || (defaultEmbedOptions.popular && defaultEmbedOptions.popular !== '0' && (!query || query.popular !== '0'))){
             page = page.replace('UC', 'PU');
-          }else if((query && query.live && query.live != '0') || (defaultEmbedOptions.live && defaultEmbedOptions.live !== '0' && (!query || query.live !== '0'))){
+          }else if((query && query.live && query.live !== '0') || (defaultEmbedOptions.live && defaultEmbedOptions.live !== '0' && (!query || query.live !== '0'))){
             url = 'https://www.youtube.com/embed/live_stream?channel='+page.replace('UC', 'UU');
             return;
           }else{
@@ -231,17 +272,24 @@ SOFTWARE.
         }else if(page.startsWith('PL')){
           url = 'https://www.youtube.com/embed?listType=playlist&list='+page+'&t=0';
           return;
+        }else if(query.search && query.search !== '0'){
+          url = 'https://www.youtube.com/embed/?listType=search&list='+page+'&t=0';
+          return;
         }else{
           url = 'https://www.youtube.com/embed/'+page+'?t=0';
           return;
         }
       }else if(domain === 'youtube.com'){
+        embedType = 'video';
         if(page.startsWith('channel/')){
           page = page.replace('channel/', '');
           if((query && query.popular && query.popular !== '0') || (defaultEmbedOptions.popular && defaultEmbedOptions.popular !== '0' && (!query || query.popular !== '0'))){
             page = page.replace('UC', 'PU');
-          }else if((query && query.live && query.live != '0') || (defaultEmbedOptions.live && defaultEmbedOptions.live !== '0' && (!query || query.live !== '0'))){
+          }else if((query && query.live && query.live !== '0') || (defaultEmbedOptions.live && defaultEmbedOptions.live !== '0' && (!query || query.live !== '0'))){
             url = 'https://www.youtube.com/embed/live_stream?channel='+page.replace('UC', 'UU');
+            return;
+          }else if(query.search && query.search !== '0'){
+            url = 'https://www.youtube.com/embed/?listType=search&list='+page+'&t=0';
             return;
           }else{
             page = page.replace('UC', 'UU');
@@ -269,6 +317,16 @@ SOFTWARE.
           url = 'https://www.youtube.com/embed/'+v+'?t=0';
           return;
         }
+      }else if(!domain || domain.trim() === '' || domain === window.location.hostname || window.location.hostname.endsWith(domain)){
+        // if local
+        if(!page || page.trim() === ''){
+          url = false;
+          return;
+        }
+        if(page.endsWith('.pdf')){
+          embedType = 'embed';
+          return;
+        }
       }
       url = false;
     });
@@ -278,7 +336,7 @@ SOFTWARE.
     if(queryObject){
       attrs = queryObject;
     }
-    return {url, attrs};
+    return {url, attrs, embedType};
   }
 
   function queryObj(query){

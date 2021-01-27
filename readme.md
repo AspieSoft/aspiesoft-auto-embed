@@ -45,6 +45,7 @@ Just put a clickable link to the video/playlist/channel, and the plugin will do 
   mute="<optional mute video> default: false"
   live="<optional embed live video> default: false"
   popular="<optional embed popular uploads playlist> default: false"
+  search="optional embed playlist based on a youtube search (default: false)"
 ]
 ```
 
@@ -92,6 +93,16 @@ AspieSoftAutoEmbedOptions = {
 
 ---
 
+### How to embed a playlist based on a youtube search
+
+> Set the link to "https://youtu.be/<insert search query>?search=1"
+
+---
+
 ### How to make the embed take up more width on mobile
 
 > Add "?min-width=\<insert min width>&max-width=\<insert max width>" to the url
+
+### How to embed a pdf
+
+> Any url that points to the current domain and ends with ".pdf" will automatically be seen as a pdf

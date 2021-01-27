@@ -3,10 +3,10 @@
 * @package AspieSoftAutoEmbed
 */
 /*
-Plugin Name: AspieSoft Auto YouTube Embed
-Plugin URI: https://www.wordpress.org/plugins/aspiesoft-auto-embed
-Description: Easily Embed Dynamic Youtube Videos Simply By Pasting The Url.
-Version: 1.0.3
+Plugin Name: Auto YouTube Embed
+Plugin URI: https://github.com/AspieSoft/aspiesoft-auto-embed
+Description: Easily Embed Dynamic Lazy Loading Youtube Videos Simply By Pasting The Url.
+Version: 1.1
 Author: AspieSoft
 Author URI: https://www.aspiesoft.com
 License: GPLv2 or later
@@ -105,8 +105,8 @@ if(!class_exists('AspieSoft_AutoEmbed')){
       // multiple plugins can use same file in the future (without functions.php class being loaded twice)
       // version added so updates to functions can still occur without breaking other plugins
       require_once(plugin_dir_path(__FILE__).'functions.php');
-      global $aspieSoft_Functions_v1;
-      self::$func = $aspieSoft_Functions_v1;
+      global $aspieSoft_Functions_v1_1;
+      self::$func = $aspieSoft_Functions_v1_1;
 
       self::$options = self::$func::options($this->plugin);
 
