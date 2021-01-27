@@ -16,7 +16,10 @@ This plugin does most of the work client side, and waits for the page to finish 
 Shortcodes are not needed (but are available), just add a clickable link to the youtube video, and the plugin will find all the youtube.com and youtu.be links, and replace them with an embed.
 
 You know how sites like facebook and discord let you paste a youtube url, and an embed of the video shows up?
-This plugin works kind of like that.
+This plugin works kind of like that, while also working with playlists, live streams, channels, youtube search, etc.
+
+YouTube has an organized url system, and this plugin recognizes it.
+Every youtube playlist id starts with "PL", and youtube uses many other consistent url methods like this.
 
 Now supports local pdf embeds.
 
