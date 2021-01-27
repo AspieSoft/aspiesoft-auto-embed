@@ -1,4 +1,4 @@
-# AspieSoft Auto Embed
+# Auto YouTube Embed
 
 Easily Embed Dynamic Youtube Videos Simply By Pasting The Url.
 
@@ -9,6 +9,8 @@ Shortcodes are not needed (but are available), just add a clickable link to the 
 
 You know how sites like facebook and discord let you paste a youtube url, and an embed of the video shows up?
 This plugin works kind of like that.
+
+Now supports local pdf embeds.
 
 ## CDN Installation
 
@@ -52,6 +54,7 @@ Just put a clickable link to the video/playlist/channel, and the plugin will do 
 ---
 
 ### How to set default options for cdn (not wordpress)
+
 ```javascript
 // add this before the cdn script is loaded
 AspieSoftAutoEmbedOptions = {
