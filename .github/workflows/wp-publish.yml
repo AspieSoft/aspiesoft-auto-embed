@@ -18,6 +18,5 @@ jobs:
           svn checkout --username=${{secrets.SVN_USER}} --password=${{secrets.SVN_PASS}} ${{secrets.SVN_URL}} wp-plugin --depth empty
           svn add --force wp-plugin/*
           svn update --accept wp-plugin/* mine-full
-          svn remove --force wp-plugin -R
           svn resolve wp-plugin --accept working -R
           svn commit wp-plugin -m "${{github.event.inputs.updateDescription}}" --username=${{secrets.SVN_USER}} --password=${{secrets.SVN_PASS}}
