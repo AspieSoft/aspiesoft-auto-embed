@@ -24,6 +24,8 @@ SOFTWARE.
 
 ;(function($){
 
+  const hasJQAlt = (typeof jqAlt !== 'undefined');
+
   defaultEmbedOptions = {
     'width': '100%',
     'min-width': '300px',
@@ -33,6 +35,12 @@ SOFTWARE.
     'mute': '0',
     'popular': '0',
     'live': '0',
+    'ignoreAttrs': ['class', 'id', 'name'], // optional list of attributes to ignore
+    'ignoreClass': null, // optional list of classes to ignore (reverse if ignoreAttrs includes "class")
+
+    yt: null, // {width, min-width, max-width, ratio}
+    pdf: null, // {width, min-width, max-width, ratio}
+    img: null, // {width, min-width, max-width, ratio}
   };
 
 
@@ -72,28 +80,60 @@ SOFTWARE.
 
   function embedLinks(){
     $('a').each(function(){
-      if(this.hasAttribute('auto-embed-checked')){
+      let elm = this;
+      if(hasJQAlt){elm = this[0];}
+
+      if(elm.hasAttribute('auto-embed-checked') || elm.hasAttribute('ignore')){
         return;
       }else{
-        this.setAttribute('auto-embed-checked', '');
+        elm.setAttribute('auto-embed-checked', '');
       }
+
+      if(Array.isArray(defaultEmbedOptions.ignoreAttrs)){
+        for(let i in defaultEmbedOptions.ignoreAttrs){
+          if(defaultEmbedOptions.ignoreAttrs[i] === 'class'){
+            if(elm.classList.length){
+              if(Array.isArray(defaultEmbedOptions.ignoreClass)){
+                for(let c in defaultEmbedOptions.ignoreClass){
+                  if(elm.classList.contains(defaultEmbedOptions.ignoreClass[c])){
+                    return;
+                  }
+                }
+              }else{
+                return;
+              }
+            }
+          }else if(elm[defaultEmbedOptions.ignoreAttrs[i]]){
+            return;
+          }
+        }
+      }
+
+      if(Array.isArray(defaultEmbedOptions.ignoreClass) && (!Array.isArray(defaultEmbedOptions.ignoreAttrs) || !defaultEmbedOptions.ignoreAttrs.includes('class'))){
+        for(let c in defaultEmbedOptions.ignoreClass){
+          if(elm.classList.contains(defaultEmbedOptions.ignoreClass[c])){
+            return;
+          }
+        }
+      }
+
       
-      let url = $(this).attr('href');
+      let url = $(elm).attr('href');
       if(!url || url.trim() === ''){
         return;
       }
 
-      let title = $(this).text();
+      let title = $(elm).text();
       if(!title || title.trim() === '' || title === url){
-        title = $(this).attr('title');
+        title = $(elm).attr('title');
         if(!title || title.trim() === ''){
           title = undefined;
         }
       }
 
-      let description = $(this).attr('description');
+      let description = $(elm).attr('description');
       if(!description || description.trim() === ''){
-        description = $(this).attr('desc');
+        description = $(elm).attr('desc');
         if(!description || description.trim() === ''){
           description = undefined;
         }
@@ -129,21 +169,41 @@ SOFTWARE.
         data.attrs['auto'] = data.attrs['autoplay'];
       }
 
-      if(data.attrs.width){
+      if(data.attrs[data.exactType]?.width){
+        let width = data.attrs[data.exactType].width;
+        if(!width.match(/[0-9]%$/)){
+          width += '%';
+        }
+        styles += 'width:'+width.replace(/\\?"/g, '\\"')+';';
+      }else if(data.attrs.width){
         let width = data.attrs.width;
         if(!width.match(/[0-9]%$/)){
           width += '%';
         }
         styles += 'width:'+width.replace(/\\?"/g, '\\"')+';';
       }
-      if(data.attrs['min-width']){
+
+      if(data.attrs[data.exactType]?.['min-width']){
+        let width = data.attrs[data.exactType]['min-width'];
+        if(!width.match(/[0-9]px$/)){
+          width += 'px';
+        }
+        styles += 'min-width:'+width.replace(/\\?"/g, '\\"')+';';
+      }else if(data.attrs['min-width']){
         let width = data.attrs['min-width'];
         if(!width.match(/[0-9]px$/)){
           width += 'px';
         }
         styles += 'min-width:'+width.replace(/\\?"/g, '\\"')+';';
       }
-      if(data.attrs['max-width']){
+
+      if(data.attrs[data.exactType]?.['max-width']){
+        let width = data.attrs[data.exactType]['max-width'];
+        if(!width.match(/[0-9]px$/)){
+          width += 'px';
+        }
+        styles += 'max-width:'+width.replace(/\\?"/g, '\\"')+';';
+      }else if(data.attrs['max-width']){
         let width = data.attrs['max-width'];
         if(!width.match(/[0-9]px$/)){
           width += 'px';
@@ -151,18 +211,21 @@ SOFTWARE.
         styles += 'max-width:'+width.replace(/\\?"/g, '\\"')+';';
       }
 
-      if(data.attrs.ratio){
+      if(data.attrs[data.exactType]?.ratio){
+        attrs += ' ratio="'+data.attrs[data.exactType]?.ratio.replace(/\\?"/g, '\\"')+'"';
+      }else if(data.attrs.ratio){
         attrs += ' ratio="'+data.attrs.ratio.replace(/\\?"/g, '\\"')+'"';
       }
-      
-      if(data.attrs.auto && data.attrs.auto !== '0'){
+
+
+      if(data.embedType === 'video' && data.attrs.auto && data.attrs.auto !== '0'){
         youtubeQueryAttrs += '&auto=1';
         if(data.attrs.mute && data.attrs.mute !== '0'){
           youtubeQueryAttrs += '&mute=1';
         }else{
           youtubeQueryAttrs += '&mute=0';
         }
-      }else if(data.attrs.mute && data.attrs.mute !== '0'){
+      }else if(data.embedType === 'video' && data.attrs.mute && data.attrs.mute !== '0'){
         youtubeQueryAttrs += '&mute=1';
       }
 
@@ -179,19 +242,19 @@ SOFTWARE.
       let iframe = undefined;
       if(data.embedType === 'video'){
         data.url = data.url.replace(/\\?"/g, '\\"')+youtubeQueryAttrs;
-        iframe = $('<div class="aspiesoft-embed" doing-init-animation'+attrs+styles+'><iframe class="aspiesoft-embed-content" style="opacity: 0;" src="'+data.url+'" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>').insertAfter(this);
+        iframe = $('<div class="aspiesoft-embed" doing-init-animation'+attrs+styles+'><iframe class="aspiesoft-embed-content" style="opacity: 0;" src="'+data.url+'" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>').insertAfter(elm);
       }else if(data.embedType === 'embed'){
-        iframe = $('<div class="aspiesoft-embed" doing-init-animation'+attrs+styles+'><iframe class="aspiesoft-embed-content" style="opacity: 0;" src="'+data.url+'" frameborder="0" allowfullscreen></iframe></div>').insertAfter(this);
+        iframe = $('<div class="aspiesoft-embed" doing-init-animation'+attrs+styles+'><iframe class="aspiesoft-embed-content" style="opacity: 0;" src="'+data.url+'" frameborder="0" allowfullscreen></iframe></div>').insertAfter(elm);
         iframe.css('border-radius', '5px');
       }else if(data.embedType === 'image'){
-        iframe = $('<div class="aspiesoft-embed" doing-init-animation'+attrs+styles+'><img class="aspiesoft-embed-content" style="opacity: 0;" src="'+data.url+'"></div>').insertAfter(this);
+        iframe = $('<div class="aspiesoft-embed" doing-init-animation'+attrs+styles+'><img class="aspiesoft-embed-content" style="opacity: 0;" src="'+data.url+'"></div>').insertAfter(elm);
       }
 
       if(!iframe){
         return;
       }
       
-      $(this).remove();
+      $(elm).remove();
 
       if(title){
         iframe.before('<h2>'+(title.replace(/\</g, '&lt;').replace(/\>/g, '&gt;'))+'</h2><br>');
@@ -211,7 +274,7 @@ SOFTWARE.
       }, 10);
 
       $('.aspiesoft-embed-content', iframe).on('load', function(){
-        $(this).css('opacity', 1);
+        $(elm).css('opacity', 1);
       });
 
       setTimeout(function(){
@@ -225,13 +288,16 @@ SOFTWARE.
 
   function fixEmbedRatio(){
     $('.aspiesoft-embed').each(function(){
-      if(this.hasAttribute('doing-init-animation')){
+      let elm = this;
+      if(hasJQAlt){elm = this[0];}
+
+      if(elm.hasAttribute('doing-init-animation')){
         return;
       }
-      let newHeight = getRatioHeight(this);
-      if(newHeight !== $(this).attr('height')){
-        $(this).attr('height', newHeight);
-        $(this).css('height', newHeight);
+      let newHeight = getRatioHeight(elm);
+      if(newHeight !== $(elm).attr('height')){
+        $(elm).attr('height', newHeight);
+        $(elm).css('height', newHeight);
       }
     });
   }
@@ -251,12 +317,14 @@ SOFTWARE.
     let attrs = undefined;
     let queryObject = undefined;
     let embedType = undefined;
+    let exactType = undefined;
 
     url.replace(/^(?:https?:\/\/|)(?:www\.|)(.*?)(?:\/(.*?)|)(?:\?(.*?)|)$/i, function(_, domain, page, query){
       query = queryObj(query);
       queryObject = query;
       if(domain === 'youtu.be'){
         embedType = 'video';
+        exactType = 'yt';
         page = page.replace(/^(.*?)\/.*/, '$1');
         if(page.startsWith('UC') || page.startsWith('UU') || page.startsWith('PU')){
           if((query && query.popular && query.popular !== '0') || (defaultEmbedOptions.popular && defaultEmbedOptions.popular !== '0' && (!query || query.popular !== '0'))){
@@ -281,6 +349,7 @@ SOFTWARE.
         }
       }else if(domain === 'youtube.com'){
         embedType = 'video';
+        exactType = 'yt';
         if(page.startsWith('channel/')){
           page = page.replace('channel/', '');
           if((query && query.popular && query.popular !== '0') || (defaultEmbedOptions.popular && defaultEmbedOptions.popular !== '0' && (!query || query.popular !== '0'))){
@@ -325,6 +394,11 @@ SOFTWARE.
         }
         if(page.endsWith('.pdf')){
           embedType = 'embed';
+          exactType = 'pdf';
+          return;
+        }else if(page.match(/\.(png|jpe?g|gif|svg|webp|ico|bmp|img|heif|tiff?|jfif)$/i)){
+          embedType = 'image';
+          exactType = 'img';
           return;
         }
       }
@@ -336,7 +410,7 @@ SOFTWARE.
     if(queryObject){
       attrs = queryObject;
     }
-    return {url, attrs, embedType};
+    return {url, attrs, embedType, exactType};
   }
 
   function queryObj(query){

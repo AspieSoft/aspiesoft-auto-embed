@@ -2,7 +2,7 @@
 
 Easily Embed Dynamic Youtube Videos Simply By Pasting The Url.
 
-Note: Requires jQuery To Run
+Note: Requires jQuery (or AspieSoft jqAlt) To Run
 
 This plugin does most of the work client side, and waits for the page to finish loading so embeds do not slow down your site.
 Shortcodes are not needed (but are available), just add a clickable link to the youtube video, and the plugin will find all the youtube.com and youtu.be links, and replace them with an embed.
@@ -19,6 +19,11 @@ Now supports local pdf embeds.
 
 ```html
 <script src="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed/cdn/embed.js"></script>
+
+<!-- jquery dependency -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- or an optional lightweight alternative made by AspieSoft -->
+<script src="https://cdn.jsdelivr.net/gh/AspieSoft/jqalt@0.0.4/jqalt/index.js"></script>
 ```
 
 ---
@@ -69,6 +74,29 @@ AspieSoftAutoEmbedOptions = {
   'mute': '0',
   'popular': '0',
   'live': '0',
+
+
+  yt: { // seperate options for youtube embeds
+    'width': '100%',
+    'min-width': '300px',
+    'max-width': '2500px',
+    'ratio': '16:9',
+  },
+
+  pdf: { // seperate options for pdf
+    'width': '100%',
+    'min-width': '300px',
+    'max-width': '2500px',
+    'ratio': '9:12',
+  },
+
+  img: { // seperate options for images
+    'width': '100%',
+    'min-width': '300px',
+    'max-width': '2500px',
+    'ratio': '16:9',
+  },
+
 };
 ```
 

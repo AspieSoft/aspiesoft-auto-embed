@@ -36,6 +36,21 @@ if(!class_exists('AspieSoft_AutoEmbed_AssetSettings')){
         'ratio' => $options['get']('embedRatio'),
         'auto' => (boolval($options['get']('embedAuto', false, true)) ? '1' : null),
         'mute' => (boolval($options['get']('embedMute', false, true)) ? '1' : null),
+
+
+        'pdf' => array(
+          'width' => $options['get']('pdfWidth'),
+          'min-width' => $options['get']('pdfWidthMin'),
+          'max-width' => $options['get']('pdfWidthMax'),
+          'ratio' => $options['get']('pdfRatio'),
+        ),
+
+        'img' => array(
+          'width' => $options['get']('imgWidth'),
+          'min-width' => $options['get']('imgWidthMin'),
+          'max-width' => $options['get']('imgWidthMax'),
+          'ratio' => $options['get']('imgRatio'),
+        ),
       );
 
       $ytChannelEmbedType = $options['get']('ytEmbedChannelType');
