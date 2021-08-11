@@ -425,4 +425,4 @@ SOFTWARE.
     return query;
   }
 
-})(jQuery);
+})(jQuery || jqAlt);

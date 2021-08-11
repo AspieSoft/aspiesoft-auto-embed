@@ -18,7 +18,7 @@ Now supports local pdf embeds.
 ## CDN Installation
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed/cdn/embed.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed@1.2/cdn/embed.js"></script>
 
 <!-- jquery dependency -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
