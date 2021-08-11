@@ -56,18 +56,16 @@ SOFTWARE.
     for(let i = 0; i < objSize; i++){
       let key = i;
       if(objI){key = objI[i];}
-      if(typeof obj2[key] && typeof obj2[key] === typeof obj1[key]){
-        if(typeof obj1[key] === 'object' || Array.isArray(obj1[key])){
-          obj1[key] = mergeObj(obj1[key], obj2[key]);
-        }else{
-          obj1[key] = obj2[key];
-        }
+      if(obj1[key] != null && obj2[key] != null && (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') || (Array.isArray(obj1[key]) && Array.isArray(obj2[key]))){
+        obj1[key] = mergeObj(obj1[key], obj2[key]);
+      }else if(obj2[key] != null){
+        obj1[key] = obj2[key];
       }
     }
 
     return obj1;
   }
-  
+
   if(typeof AspieSoftAutoEmbedOptions === 'object'){
     defaultEmbedOptions = mergeObj(defaultEmbedOptions, AspieSoftAutoEmbedOptions);
   }
@@ -274,7 +272,7 @@ SOFTWARE.
       }, 10);
 
       $('.aspiesoft-embed-content', iframe).on('load', function(){
-        $(elm).css('opacity', 1);
+        $(this).css('opacity', 1);
       });
 
       setTimeout(function(){
