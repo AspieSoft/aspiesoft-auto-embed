@@ -3,10 +3,10 @@
 * @package AspieSoftAutoEmbed
 */
 /*
-Plugin Name: Auto YouTube Embed
+Plugin Name: Auto Embed (YouTube, PDF, Image)
 Plugin URI: https://github.com/AspieSoft/aspiesoft-auto-embed
 Description: Easily Embed Dynamic Lazy Loading Youtube Videos Simply By Pasting The Url.
-Version: 1.2.1
+Version: 1.2.2
 Author: AspieSoft
 Author URI: https://www.aspiesoft.com
 License: GPLv2 or later
@@ -14,8 +14,6 @@ Text Domain: aspiesoft-auto-embed
 */
 
 /*
-Copyright (C) 2020 aspiesoftweb@gmail.com
-
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -31,14 +29,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+/*
+  This plugin is made from a template by AspieSoft: https://github.com/AspieSoft/wp-auto-embed
+  The main source code that is modified from the template is in the "src" directory
+*/
+
+
 // In God We Trust
 
 
 // most of this plugins front end runs client side (javascript) for a faster page load
 // the src directory is where the main code for this plugin is located
 // the files outside the src directory are built to dynamically run the code inside the src directory
-
-// although this plugin is currently for youtube embeds, in the future, there may be new (optional) auto embeds added (example: pdf, png, ect.)
 
 if(!defined('ABSPATH')){
   http_response_code(404);
@@ -57,6 +59,7 @@ if(!class_exists('AspieSoft_AutoEmbed')){
 
     private static $func;
     private static $options;
+    private static $optionsGlobal;
 
     private $useJSDelivr;
 
@@ -69,15 +72,29 @@ if(!class_exists('AspieSoft_AutoEmbed')){
       // also helps with testing the plugin in development, because the backend won't crash if the main plugin file has php errors
       //todo: add visual of embed to frontend (may also add widget/button if possible)
       //todo: embed images
+
       if(!is_admin()){
-        require_once(plugin_dir_path(__FILE__).'src/main.php');
+        $this->loadPluginFile('main');
+      }else if(is_admin()){
+        $this->loadPluginFile('admin');
+      }
+
+    }
+
+
+    private function loadPluginFile($name){
+      $path = plugin_dir_path(__FILE__).'src/'.$name.'.php';
+      if(file_exists($path)){
+        $name = str_replace('-', '', ucwords($name, '-'));
+        require_once($path);
         $pName = str_replace('-', '_', sanitize_html_class($this->plugin['pluginName']));
-        if(class_exists('AspieSoft_'.$pName.'_Main')){
-          ${'aspieSoft_'.$pName.'_Main'}->init($this->plugin);
-          ${'aspieSoft_'.$pName.'_Main'}->start();
+        if(class_exists('AspieSoft_'.$pName.'_'.$name)){
+          ${'aspieSoft_'.$pName.'_'.$name}->init($this->plugin);
+          ${'aspieSoft_'.$pName.'_'.$name}->start();
         }
       }
     }
+
 
     function register(){
       // ensure get_plugin_data function is loaded on frontend
@@ -105,40 +122,28 @@ if(!class_exists('AspieSoft_AutoEmbed')){
       // multiple plugins can use same file in the future (without functions.php class being loaded twice)
       // version added so updates to functions can still occur without breaking other plugins
       require_once(plugin_dir_path(__FILE__).'functions.php');
-      global $aspieSoft_Functions_v1_1;
-      self::$func = $aspieSoft_Functions_v1_1;
+      global $aspieSoft_Functions_v1_3;
+      self::$func = $aspieSoft_Functions_v1_3;
 
       self::$options = self::$func::options($this->plugin);
+      self::$optionsGlobal = self::$func::options(array('setting' => 'global'));
 
-      $this->useJSDelivr = self::$options['get']('jsdelivr', false, true);
+      $jsdelivrOption = self::$options['get']('jsdelivr', 'default');
+      if($jsdelivrOption === 'default'){
+        $jsdelivrOption = self::$optionsGlobal['get']('jsdelivr', 'local');
+      }
+      if($jsdelivrOption === 'jsdelivr'){
+        $this->useJSDelivr = true;
+      }else{
+        $this->useJSDelivr = false;
+      }
 
       add_action('wp_enqueue_scripts', array($this, 'enqueue'));
-      add_action('admin_enqueue_scripts', array($this, 'admin_enqueue'));
-      add_action('admin_menu', array($this, 'add_admin_pages'));
-      add_filter("plugin_action_links_$this->pluginName", array($this, 'settings_link'));
 
-      if(self::$options['get']('disableWpEmbed', false, true)){
-        add_filter('tiny_mce_plugins', array($this, 'disableWpEmbedEditor'));
-        add_action('init', array($this, 'disableWpEmbedInit'), 9999);
-        add_action('wp_footer', array($this, 'disableWpEmbedFooter'));
+      if(file_exists(plugin_dir_path(__FILE__).'src/settings.php')){
+        add_action('admin_menu', array($this, 'add_admin_pages'));
+        add_filter("plugin_action_links_$this->pluginName", array($this, 'settings_link'));
       }
-    }
-
-    function disableWpEmbedEditor($plugins){
-      return array_diff($plugins, array('wpview'));
-    }
-
-    function disableWpEmbedInit(){
-      remove_action('rest_api_init', 'wp_oembed_register_route');
-      remove_filter('oembed_dataparse', 'wp_filter_oembed_result', 10);
-      remove_action('wp_head', 'wp_oembed_add_discovery_links');
-      remove_action('wp_head', 'wp_oembed_add_host_js');
-    }
-
-    function disableWpEmbedFooter(){
-      wp_dequeue_script('wp-embed');
-      remove_action('wp_enqueue_scripts', 'wp-embed', 9999);
-      remove_filter('the_content', array($GLOBALS['wp_embed'], 'autoembed'), 8);
     }
 
     function settings_link($links){
@@ -155,12 +160,16 @@ if(!class_exists('AspieSoft_AutoEmbed')){
     }
 
     public function activate(){
-      $this->enableOptionsAutoload();
+      if(file_exists(plugin_dir_path(__FILE__).'src/settings.php')){
+        $this->enableOptionsAutoload();
+      }
       //flush_rewrite_rules();
     }
 
     public function deactivate(){
-      $this->disableOptionsAutoload();
+      if(file_exists(plugin_dir_path(__FILE__).'src/settings.php')){
+        $this->disableOptionsAutoload();
+      }
       //flush_rewrite_rules();
     }
 
@@ -207,15 +216,7 @@ if(!class_exists('AspieSoft_AutoEmbed')){
       self::$options['setList']($optionList, true, false, true);
     }
 
-    function admin_enqueue(){
-      if(is_admin() && self::$options['get']('enableEditorAutoUrl', false, true)){
-        wp_enqueue_script('AspieSoft_Editor_AutoUrl', plugins_url('/assets/editor-auto-url.js', __FILE__), array('jquery'), '1.0', true);
-      }
-    }
-
     function enqueue(){
-      //todo: try grabbing from github if online (check if wordpress allows it first)
-
       // dynamically enqueue all js and css assets from src/assets
 
       $assetsDir = plugin_dir_path(__FILE__).'src/assets/';

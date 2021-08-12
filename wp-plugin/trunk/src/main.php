@@ -20,12 +20,18 @@ if(!class_exists('AspieSoft_AutoEmbed_Main')){
       // get plugin data and load common functions
       $this->plugin = $pluginData;
       require_once(plugin_dir_path(__FILE__).'../functions.php');
-      global $aspieSoft_Functions_v1_1;
-      self::$func = $aspieSoft_Functions_v1_1;
+      global $aspieSoft_Functions_v1_3;
+      self::$func = $aspieSoft_Functions_v1_3;
       self::$options = self::$func::options($this->plugin);
     }
 
     public function start(){
+      if(self::$options['get']('disableWpEmbed', false, true)){
+        add_filter('tiny_mce_plugins', array($this, 'disableWpEmbedEditor'));
+        add_action('init', array($this, 'disableWpEmbedInit'), 9999);
+        add_action('wp_footer', array($this, 'disableWpEmbedFooter'));
+      }
+
       // add shortcode
       add_shortcode('auto-embed', array($this, 'shortcode_Embed'));
 
@@ -164,6 +170,24 @@ if(!class_exists('AspieSoft_AutoEmbed_Main')){
         }
       }
       return null;
+    }
+
+
+    function disableWpEmbedEditor($plugins){
+      return array_diff($plugins, array('wpview'));
+    }
+
+    function disableWpEmbedInit(){
+      remove_action('rest_api_init', 'wp_oembed_register_route');
+      remove_filter('oembed_dataparse', 'wp_filter_oembed_result', 10);
+      remove_action('wp_head', 'wp_oembed_add_discovery_links');
+      remove_action('wp_head', 'wp_oembed_add_host_js');
+    }
+
+    function disableWpEmbedFooter(){
+      wp_dequeue_script('wp-embed');
+      remove_action('wp_enqueue_scripts', 'wp-embed', 9999);
+      remove_filter('the_content', array($GLOBALS['wp_embed'], 'autoembed'), 8);
     }
 
   }

@@ -15,10 +15,14 @@ if(!class_exists('AspieSoft_AutoEmbed_Settings')){
     // settings for admin page (client side assets/settings.js file reads this, and loads html inputs from it)
     public function getOptionList(){
       $optionList = array(
+        'jsdelivr' => array('label' => 'Load Assets From', 'default' => 'default', 'form' => '[label][select][br]', 'type' => 'select', 'options' => array(
+          'default' => 'Default',
+          'local' => 'Your Site',
+          'jsdelivr' => 'Github (jsdelivr.net) (recommended)',
+        )),
+
         'disableWpEmbed' => array('label' => 'Disable Wp-Embed', 'default' => 'false', 'form' => '[check][label][br]', 'type' => 'bool'),
         'enableEditorAutoUrl' => array('label' => 'Automatically Make URLs Clickable In Page Editor', 'default' => 'false', 'form' => '[check][label][br][br]', 'type' => 'bool'),
-
-        'jsdelivr' => array('label' => 'Use jsdelivr.net (recommended)', 'default' => 'false', 'form' => '[check][label][br][br]', 'type' => 'bool'),
 
         'altShortcode_default' => array('label' => 'Alternate Shortcode Name', 'default' => '', 'form' => '[label][text][br]'),
         'altShortcode' => array('label' => 'Alternate YouTube Shortcode Name', 'default' => '', 'form' => '[label][text][br][br]'),
@@ -47,6 +51,17 @@ if(!class_exists('AspieSoft_AutoEmbed_Settings')){
         'imgWidthMax' => array('label' => 'Max Width', 'default' => '2500', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
         'imgRatio' => array('label' => 'Ratio', 'default' => array(16, 9), 'form' => '[label][number{width:60px;}]:[number{width:60px;}][br][br]', 'format' => '%s:%s'),
 
+      );
+      return $optionList;
+    }
+
+    // global settings shared by all plugins
+    public function getOptionListGlobal(){
+      $optionList = array(
+        'jsdelivr' => array('label' => 'Load Assets From', 'default' => 'local', 'form' => '[label][select][br][hr]', 'type' => 'select', 'options' => array(
+          'local' => 'Your Site',
+          'jsdelivr' => 'Github (jsdelivr.net) (recommended)',
+        )),
       );
       return $optionList;
     }
