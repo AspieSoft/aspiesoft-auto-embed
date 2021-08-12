@@ -83,6 +83,13 @@ AspieSoftAutoEmbedOptions = {
     'ratio': '16:9',
   },
 
+  fb: { // seperate options for facebook page embeds
+    'width': '100%',
+    'min-width': '300px',
+    'max-width': '2500px',
+    'ratio': '16:9',
+  },
+
   pdf: { // seperate options for pdf
     'width': '100%',
     'min-width': '300px',

@@ -35,7 +35,7 @@ SOFTWARE.
     'mute': '0',
     'popular': '0',
     'live': '0',
-    'ignoreAttrs': ['class', 'id', 'name'], // optional list of attributes to ignore
+    'ignoreAttrs': ['class', 'id', 'name', 'target'], // optional list of attributes to ignore
     'ignoreClass': null, // optional list of classes to ignore (reverse if ignoreAttrs includes "class")
 
     yt: null, // {width, min-width, max-width, ratio}
