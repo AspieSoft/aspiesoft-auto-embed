@@ -15,6 +15,7 @@ body {
   top: 32px;
   width: 100%;
   box-shadow: 0 0 2px #121212;
+  z-index: 10000;
 }
 
 #aspiesoft-admin-options-header h1 {

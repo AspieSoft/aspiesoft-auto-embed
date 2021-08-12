@@ -164,7 +164,7 @@ if(!class_exists('AspieSoft_Settings')){
       // get plugin data
       $pluginData = get_plugin_data(WP_PLUGIN_DIR.'/'.sanitize_text_field(constant('PLUGIN_BASENAME_'.basename(plugin_dir_path(dirname(__FILE__, 1))))));
       $this->plugin = array(
-        'name' => sanitize_text_field($pluginData['Name']),
+        'name' => preg_replace('/\s*\(.*?\)/', '', sanitize_text_field($pluginData['Name'])),
         'setting' => str_replace('-', '', ucwords(sanitize_text_field($pluginData['TextDomain']), '-')),
         'slug' => sanitize_text_field($pluginData['TextDomain']),
         'version' => sanitize_text_field($pluginData['Version']),

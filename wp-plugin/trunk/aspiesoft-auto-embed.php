@@ -3,10 +3,10 @@
 * @package AspieSoftAutoEmbed
 */
 /*
-Plugin Name: Auto Embed (YouTube, PDF, Image)
+Plugin Name: Auto Embed (YouTube, Facebook, PDF, Image)
 Plugin URI: https://github.com/AspieSoft/aspiesoft-auto-embed
 Description: Easily Embed Dynamic Lazy Loading Youtube Videos Simply By Pasting The Url.
-Version: 1.2.2
+Version: 1.3
 Author: AspieSoft
 Author URI: https://www.aspiesoft.com
 License: GPLv2 or later
@@ -105,7 +105,7 @@ if(!class_exists('AspieSoft_AutoEmbed')){
       // grab plugin data to use dynamic to the plugin
       $pluginData = get_plugin_data(__FILE__);
       $this->plugin = array(
-        'name' => sanitize_text_field($pluginData['Name']),
+        'name' => preg_replace('/\s*\(.*?\)/', '', sanitize_text_field($pluginData['Name'])),
         'setting' => str_replace('-', '', ucwords(sanitize_text_field($pluginData['TextDomain']), '-')),
         'slug' => sanitize_text_field($pluginData['TextDomain']),
         'version' => sanitize_text_field($pluginData['Version']),

@@ -41,12 +41,17 @@ if(!class_exists('AspieSoft_AutoEmbed_Settings')){
         'embedMute' => array('label' => 'Mute', 'default' => 'false', 'form' => '[check][label][br]', 'type' => 'bool'),
 
 
-        'pdfWidth' => array('label' => 'Width', 'default' => '100', 'form' => '[br][hr][br]PDF[br][label][number{width:80px;}]%[br]', 'format' => '%s%'),
+        'fbWidth' => array('label' => 'Width', 'default' => '100', 'form' => '[br][hr][h2]Facebook[/h2][br][label][number{width:80px;}]%[br]', 'format' => '%s%'),
+        'fbWidthMin' => array('label' => 'Min Width', 'default' => '300', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
+        'fbWidthMax' => array('label' => 'Max Width', 'default' => '500', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
+        'fbRatio' => array('label' => 'Ratio', 'default' => array(5, 8), 'form' => '[label][number{width:60px;}]:[number{width:60px;}][br][br]', 'format' => '%s:%s'),
+
+        'pdfWidth' => array('label' => 'Width', 'default' => '100', 'form' => '[br][hr][h2]PDF[/h2][br][label][number{width:80px;}]%[br]', 'format' => '%s%'),
         'pdfWidthMin' => array('label' => 'Min Width', 'default' => '300', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
         'pdfWidthMax' => array('label' => 'Max Width', 'default' => '2500', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
         'pdfRatio' => array('label' => 'Ratio', 'default' => array(9, 12), 'form' => '[label][number{width:60px;}]:[number{width:60px;}][br][br]', 'format' => '%s:%s'),
 
-        'imgWidth' => array('label' => 'Width', 'default' => '100', 'form' => '[br][hr][br]Image[br][label][number{width:80px;}]%[br]', 'format' => '%s%'),
+        'imgWidth' => array('label' => 'Width', 'default' => '100', 'form' => '[br][hr][h2]Image[/h2][br][label][number{width:80px;}]%[br]', 'format' => '%s%'),
         'imgWidthMin' => array('label' => 'Min Width', 'default' => '300', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
         'imgWidthMax' => array('label' => 'Max Width', 'default' => '2500', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
         'imgRatio' => array('label' => 'Ratio', 'default' => array(16, 9), 'form' => '[label][number{width:60px;}]:[number{width:60px;}][br][br]', 'format' => '%s:%s'),

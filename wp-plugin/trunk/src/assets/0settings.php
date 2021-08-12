@@ -52,6 +52,13 @@ if(!class_exists('AspieSoft_AutoEmbed_AssetSettings')){
           'ratio' => $options['get']('imgRatio'),
         ),
 
+        'fb' => array(
+          'width' => $options['get']('fbWidth'),
+          'min-width' => $options['get']('fbWidthMin'),
+          'max-width' => $options['get']('fbWidthMax'),
+          'ratio' => $options['get']('fbRatio'),
+        ),
+
       );
 
       $ytChannelEmbedType = $options['get']('ytEmbedChannelType');

@@ -170,7 +170,12 @@
       }
 
       let valueIndex = 0;
-      let html = option['form'].replace(/\[(\w+)(?:\{([\w\-:;]+)\}|)\]/g, function(_, inputType, inputStyle){
+      let html = option['form'].replace(/(!|)\[(.*?)\]\((.*?)\)/g, function(_, emb, name, url){
+        if(emb !== ''){
+          return `<img src="${url}" alt="${name}">`;
+        }
+        return `<a href="${url}">${name}</a>`;
+      }).replace(/\[(\/?\w+)(?:\{([\w\-:;]+)\}|)\]/g, function(_, inputType, inputStyle){
         let style = '';
         if(inputStyle){
           style = ' style="'+inputStyle+'"';
@@ -178,12 +183,19 @@
         if(inputType === 'input'){
           inputType = 'text';
         }
+
         if(inputType === 'br'){
           return '<br'+style+'>';
-        }
-        if(inputType === 'hr'){
+        }else if(inputType === 'hr'){
           return '<hr'+style+'>';
         }
+
+        if(inputType.match(/^h[1-6]$/)){
+          return inputType.replace(/^h([1-6])$/, '<h$1'+style+'>');
+        }else if(inputType.match(/^\/h[1-6]$/)){
+          return inputType.replace(/^\/h([1-6])$/, '</h$1>');
+        }
+
         if(inputType === 'label'){
           return '<label for="'+name+'"'+style+'>'+label+'</label>';
         }

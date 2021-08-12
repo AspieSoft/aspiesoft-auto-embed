@@ -41,6 +41,7 @@ SOFTWARE.
     yt: null, // {width, min-width, max-width, ratio}
     pdf: null, // {width, min-width, max-width, ratio}
     img: null, // {width, min-width, max-width, ratio}
+    fb: null, // {width, min-width, max-width, ratio}
   };
 
 
@@ -242,7 +243,7 @@ SOFTWARE.
         data.url = data.url.replace(/\\?"/g, '\\"')+youtubeQueryAttrs;
         iframe = $('<div class="aspiesoft-embed" doing-init-animation'+attrs+styles+'><iframe class="aspiesoft-embed-content" style="opacity: 0;" src="'+data.url+'" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>').insertAfter(elm);
       }else if(data.embedType === 'embed'){
-        iframe = $('<div class="aspiesoft-embed" doing-init-animation'+attrs+styles+'><iframe class="aspiesoft-embed-content" style="opacity: 0;" src="'+data.url+'" frameborder="0" allowfullscreen></iframe></div>').insertAfter(elm);
+        iframe = $('<div class="aspiesoft-embed" doing-init-animation'+attrs+styles+'><iframe class="aspiesoft-embed-content" style="opacity: 0;" src="'+data.url+'" frameborder="0" allowfullscreen allow="encrypted-media" allowtransparency="true"></iframe></div>').insertAfter(elm);
         iframe.css('border-radius', '5px');
       }else if(data.embedType === 'image'){
         iframe = $('<div class="aspiesoft-embed" doing-init-animation'+attrs+styles+'><img class="aspiesoft-embed-content" style="opacity: 0;" src="'+data.url+'"></div>').insertAfter(elm);
@@ -320,6 +321,11 @@ SOFTWARE.
     url.replace(/^(?:https?:\/\/|)(?:www\.|)(.*?)(?:\/(.*?)|)(?:\?(.*?)|)$/i, function(_, domain, page, query){
       query = queryObj(query);
       queryObject = query;
+      if(page){
+        page = page.replace(/\\/g, '/').replace(/\/$/, '');
+      }else{
+        page = '';
+      }
       if(domain === 'youtu.be'){
         embedType = 'video';
         exactType = 'yt';
@@ -384,6 +390,29 @@ SOFTWARE.
           url = 'https://www.youtube.com/embed/'+v+'?t=0';
           return;
         }
+      }else if(domain === 'facebook.com'){
+        if(page.includes('video')){
+          //todo: embed facebook video
+          url = false;
+          return;
+        }
+
+        let href;
+        if(page === 'plugins/page' || page === 'plugins/page.php'){
+          href = query.href;
+        }else{
+          page = page.split('/');
+          if(page[0] === 'page'){
+            href = `https%3A%2F%2Fwww.facebook.com%2F${page[1].toString().replace(/[^\w_\-$\.]/g, '')}%2F`;
+          }else{
+            href = `https%3A%2F%2Fwww.facebook.com%2F${page[0].replace(/[^\w_\-$\.]/g, '')}%2F`;
+          }
+        }
+
+        url = `https://www.facebook.com/plugins/page.php?href=${href}&tabs=timeline&width=500&height=800&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&appId`;
+        embedType = 'embed';
+        exactType = 'fb';
+        return;
       }else if(!domain || domain.trim() === '' || domain === window.location.hostname || window.location.hostname.endsWith(domain)){
         // if local
         if(!page || page.trim() === ''){
@@ -421,8 +450,9 @@ SOFTWARE.
           query[listItem[1]] = listItem[2];
         }
       }
+      return query;
     }
-    return query;
+    return {};
   }
 
 })(jQuery || jqAlt);
