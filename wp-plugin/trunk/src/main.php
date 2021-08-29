@@ -141,6 +141,11 @@ if(!class_exists('AspieSoft_AutoEmbed_Main')){
       if($attr['description'] || $attr['desc']){
         $result .= ' description="'.($attr['description'] || $attr['desc']).'"';
       }
+
+      if(self::$options['get']('ytOnlyEmbedShortcode', false, true)){
+        $result .= ' yt-auto-embed';
+      }
+
       $result .= '>';
       if($attr['title'] || $attr['name']){
         $result .= ($attr['title'] || $attr['name']);

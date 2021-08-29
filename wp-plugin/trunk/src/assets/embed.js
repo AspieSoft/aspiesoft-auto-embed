@@ -35,8 +35,9 @@ SOFTWARE.
     'mute': '0',
     'popular': '0',
     'live': '0',
-    'ignoreAttrs': ['class', 'id', 'name', 'target'], // optional list of attributes to ignore
-    'ignoreClass': null, // optional list of classes to ignore (reverse if ignoreAttrs includes "class")
+    'ignoreAttrs': ['class', 'id', 'name', 'target'], // optional [array] list of attributes to ignore
+    'ignoreClass': null, // optional [array] list of classes to ignore (reverses to required if ignoreAttrs includes "class")
+    'requireAttrs': null, // optional [array] list of attributes to require
 
     yt: null, // {width, min-width, max-width, ratio}
     pdf: null, // {width, min-width, max-width, ratio}
@@ -87,6 +88,15 @@ SOFTWARE.
       }else{
         elm.setAttribute('auto-embed-checked', '');
       }
+      
+
+      if(Array.isArray(defaultEmbedOptions.requireAttrs)){
+        for(let i in defaultEmbedOptions.requireAttrs){
+          if(!elm.hasAttribute(defaultEmbedOptions.requireAttrs[i])){
+            return;
+          }
+        }
+      }
 
       if(Array.isArray(defaultEmbedOptions.ignoreAttrs)){
         for(let i in defaultEmbedOptions.ignoreAttrs){
@@ -94,7 +104,7 @@ SOFTWARE.
             if(elm.classList.length){
               if(Array.isArray(defaultEmbedOptions.ignoreClass)){
                 for(let c in defaultEmbedOptions.ignoreClass){
-                  if(elm.classList.contains(defaultEmbedOptions.ignoreClass[c])){
+                  if(!elm.classList.contains(defaultEmbedOptions.ignoreClass[c])){
                     return;
                   }
                 }
@@ -102,7 +112,7 @@ SOFTWARE.
                 return;
               }
             }
-          }else if(elm[defaultEmbedOptions.ignoreAttrs[i]]){
+          }else if(elm.hasAttribute(defaultEmbedOptions.ignoreAttrs[i])){
             return;
           }
         }

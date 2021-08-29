@@ -72,6 +72,9 @@ Any url that points to the current domain and ends with ".pdf" will automaticall
 
 == Changelog ==
 
+= 1.4 =
+Added option to only embed shortcodes
+
 = 1.2 =
 Added support for embedding images
 Now ignores links that include class, id, or name attributes (to allow button links to work as normal)
@@ -86,6 +89,9 @@ Added option to load scripts and styles from jsdelivr.net (can improve performan
 Initial Commit
 
 == Upgrade Notice ==
+
+= 1.4 =
+Added option to only embed shortcodes
 
 = 1.2 =
 Added support for embedding images

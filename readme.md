@@ -75,6 +75,10 @@ AspieSoftAutoEmbedOptions = {
   'popular': '0',
   'live': '0',
 
+  'ignoreAttrs': ['class', 'id', 'name', 'target'], // optional [array] list of attributes to ignore
+  'ignoreClass': null, // optional [array] list of classes to ignore (reverses to required if ignoreAttrs includes "class")
+  'requireAttrs': null, // optional [array] list of attributes to require
+
 
   yt: { // seperate options for youtube embeds
     'width': '100%',

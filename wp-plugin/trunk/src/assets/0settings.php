@@ -68,6 +68,11 @@ if(!class_exists('AspieSoft_AutoEmbed_AssetSettings')){
         $opts['live'] = '1';
       }
 
+      // only embed shortcode
+      if($options['get']('ytOnlyEmbedShortcode', false, true)){
+        $opts['requireAttrs'] = array('yt-auto-embed');
+      }
+
       $opts = wp_json_encode($opts);
       wp_add_inline_script($scriptBefore, ";var AspieSoftAutoEmbedOptions = $opts;", 'before');
     }

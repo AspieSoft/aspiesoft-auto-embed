@@ -27,18 +27,20 @@ if(!class_exists('AspieSoft_AutoEmbed_Settings')){
         'altShortcode_default' => array('label' => 'Alternate Shortcode Name', 'default' => '', 'form' => '[label][text][br]'),
         'altShortcode' => array('label' => 'Alternate YouTube Shortcode Name', 'default' => '', 'form' => '[label][text][br][br]'),
 
-        'embedWidth' => array('label' => 'Width', 'default' => '100', 'form' => '[label][number{width:80px;}]%[br]', 'format' => '%s%'),
+        'embedWidth' => array('label' => 'Width', 'default' => '100', 'form' => '[br][hr][h2]YouTube[/h2][br][label][number{width:80px;}]%[br]', 'format' => '%s%'),
         'embedWidthMin' => array('label' => 'Min Width', 'default' => '300', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
         'embedWidthMax' => array('label' => 'Max Width', 'default' => '2500', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
         'embedRatio' => array('label' => 'Ratio', 'default' => array(16, 9), 'form' => '[label][number{width:60px;}]:[number{width:60px;}][br][br]', 'format' => '%s:%s'),
 
-        'ytEmbedChannelType' => array('label' => 'YouTube Channel Embed Type', 'default' => 'uploads', 'form' => '[label][select][br]', 'type' => 'select', 'options' => array(
+        'ytEmbedChannelType' => array('label' => 'Channel Embed Type', 'default' => 'uploads', 'form' => '[label][select][br]', 'type' => 'select', 'options' => array(
           'uploads' => 'Recent Uploads',
           'popular' => 'Popular Uploads',
           'live' => 'Live Stream',
         )),
         'embedAuto' => array('label' => 'Auto Play', 'default' => 'false', 'form' => '[check][label]', 'type' => 'bool'),
         'embedMute' => array('label' => 'Mute', 'default' => 'false', 'form' => '[check][label][br]', 'type' => 'bool'),
+
+        'ytOnlyEmbedShortcode' => array('label' => 'Only Embed Shortcodes', 'default' => 'false', 'form' => '[check][label][br]', 'type' => 'bool'),
 
 
         'fbWidth' => array('label' => 'Width', 'default' => '100', 'form' => '[br][hr][h2]Facebook[/h2][br][label][number{width:80px;}]%[br]', 'format' => '%s%'),
