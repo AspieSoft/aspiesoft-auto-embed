@@ -22,9 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-;(function($){
+;(function(){
 
-  const hasJQAlt = (typeof jqAlt !== 'undefined');
+  const $ = (function(){
+    if(typeof jQuery !== 'undefined'){
+      return jQuery;
+    }else if(typeof jqAlt !== 'undefined'){
+      return jqAlt.jquery();
+    }
+    console.error('jQuery or jqAlt were not loaded!');
+    return undefined;
+  })();
 
   defaultEmbedOptions = {
     'width': '100%',
@@ -35,6 +43,7 @@ SOFTWARE.
     'mute': '0',
     'popular': '0',
     'live': '0',
+
     'ignoreAttrs': ['class', 'id', 'name', 'target'], // optional [array] list of attributes to ignore
     'ignoreClass': null, // optional [array] list of classes to ignore (reverses to required if ignoreAttrs includes "class")
     'requireAttrs': null, // optional [array] list of attributes to require
@@ -81,7 +90,6 @@ SOFTWARE.
   function embedLinks(){
     $('a').each(function(){
       let elm = this;
-      if(hasJQAlt){elm = this[0];}
 
       if(elm.hasAttribute('auto-embed-checked') || elm.hasAttribute('ignore')){
         return;
@@ -298,7 +306,6 @@ SOFTWARE.
   function fixEmbedRatio(){
     $('.aspiesoft-embed').each(function(){
       let elm = this;
-      if(hasJQAlt){elm = this[0];}
 
       if(elm.hasAttribute('doing-init-animation')){
         return;
@@ -465,4 +472,4 @@ SOFTWARE.
     return {};
   }
 
-})(jQuery || jqAlt);
+})();
