@@ -17,6 +17,8 @@ if(!class_exists('AspieSoft_AutoEmbed_AssetSettings')){
     public $plugin;
     public static $func;
 
+    private $opts;
+
     public function init($pluginData){
       $this->plugin = $pluginData;
       require_once(plugin_dir_path(__FILE__).'../../functions.php');
@@ -24,57 +26,52 @@ if(!class_exists('AspieSoft_AutoEmbed_AssetSettings')){
       self::$func = $aspieSoft_Functions_v1_3;
     }
 
+
+    private function addEmbedType($name, $options){
+      $this->opts['fb'] = array(
+        'width' => $options['get']($name.'Width'),
+        'min-width' => $options['get']($name.'WidthMin'),
+        'max-width' => $options['get']($name.'WidthMax'),
+        'ratio' => $options['get']($name.'Ratio'),
+      );
+    }
+
+
     public function addScript($scriptBefore){
       // send proper settings to client
 
       $options = self::$func::options($this->plugin);
 
-      $opts = array(
+      $this->opts = array(
         'width' => $options['get']('embedWidth'),
         'min-width' => $options['get']('embedWidthMin'),
         'max-width' => $options['get']('embedWidthMax'),
         'ratio' => $options['get']('embedRatio'),
         'auto' => (boolval($options['get']('embedAuto', false, true)) ? '1' : null),
         'mute' => (boolval($options['get']('embedMute', false, true)) ? '1' : null),
-
-
-        'pdf' => array(
-          'width' => $options['get']('pdfWidth'),
-          'min-width' => $options['get']('pdfWidthMin'),
-          'max-width' => $options['get']('pdfWidthMax'),
-          'ratio' => $options['get']('pdfRatio'),
-        ),
-
-        'img' => array(
-          'width' => $options['get']('imgWidth'),
-          'min-width' => $options['get']('imgWidthMin'),
-          'max-width' => $options['get']('imgWidthMax'),
-          'ratio' => $options['get']('imgRatio'),
-        ),
-
-        'fb' => array(
-          'width' => $options['get']('fbWidth'),
-          'min-width' => $options['get']('fbWidthMin'),
-          'max-width' => $options['get']('fbWidthMax'),
-          'ratio' => $options['get']('fbRatio'),
-        ),
-
       );
 
       $ytChannelEmbedType = $options['get']('ytEmbedChannelType');
       if($ytChannelEmbedType === 'popular'){
-        $opts['popular'] = '1';
+        $this->opts['popular'] = '1';
       }else if($ytChannelEmbedType === 'live'){
-        $opts['live'] = '1';
+        $this->opts['live'] = '1';
       }
 
       // only embed shortcode
       if($options['get']('ytOnlyEmbedShortcode', false, true)){
-        $opts['requireAttrs'] = array('yt-auto-embed');
+        $this->opts['requireAttrs'] = array('yt-auto-embed');
       }
 
-      $opts = wp_json_encode($opts);
-      wp_add_inline_script($scriptBefore, ";var AspieSoftAutoEmbedOptions = $opts;", 'before');
+
+      $this->addEmbedType('fb', $options);
+
+      $this->addEmbedType('pdf', $options);
+      $this->addEmbedType('img', $options);
+
+
+      $resOpts = wp_json_encode($this->opts);
+      wp_add_inline_script($scriptBefore, ";var AspieSoftAutoEmbedOptions = $resOpts;", 'before');
     }
 
     // addStyle can be used in the future to enqueue inline styles

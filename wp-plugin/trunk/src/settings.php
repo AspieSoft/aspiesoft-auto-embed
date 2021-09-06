@@ -12,9 +12,39 @@ if(!class_exists('AspieSoft_AutoEmbed_Settings')){
 
   class AspieSoft_AutoEmbed_Settings{
 
+    private $localOptionList;
+
+    private function addEmbedType($name, $default = null){
+      $sizes = array(
+        'width' => '100',
+        'min-width' => '300',
+        'max-width' => '2500',
+        'ratio' => array(16, 9),
+      );
+      if(is_array($default)){
+        if($default['width'] !== null){
+          $sizes['width'] = $default['width'];
+        }
+        if($default['min-width'] !== null){
+          $sizes['min-width'] = $default['min-width'];
+        }
+        if($default['max-width'] !== null){
+          $sizes['max-width'] = $default['max-width'];
+        }
+        if($default['ratio'] !== null){
+          $sizes['ratio'] = $default['ratio'];
+        }
+      }
+
+      $this->localOptionList[$name.'Width'] = array('label' => 'Width', 'default' => '100', 'form' => '[br][hr][h2]Image[/h2][br][label][number{width:80px;}]%[br]', 'format' => '%s%');
+      $this->localOptionList[$name . 'WidthMin'] = array('label' => 'Min Width', 'default' => '300', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx');
+      $this->localOptionList[$name . 'WidthMax'] = array('label' => 'Max Width', 'default' => '2500', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx');
+      $this->localOptionList[$name . 'Ratio'] = array('label' => 'Ratio', 'default' => array(16, 9), 'form' => '[label][number{width:60px;}]:[number{width:60px;}][br][br]', 'format' => '%s:%s');
+    }
+
     // settings for admin page (client side assets/settings.js file reads this, and loads html inputs from it)
     public function getOptionList(){
-      $optionList = array(
+      $this->localOptionList = array(
         'jsdelivr' => array('label' => 'Load Assets From', 'default' => 'default', 'form' => '[label][select][br]', 'type' => 'select', 'options' => array(
           'default' => 'Default',
           'local' => 'Your Site',
@@ -42,24 +72,24 @@ if(!class_exists('AspieSoft_AutoEmbed_Settings')){
 
         'ytOnlyEmbedShortcode' => array('label' => 'Only Embed Shortcodes', 'default' => 'false', 'form' => '[check][label][br]', 'type' => 'bool'),
 
-
-        'fbWidth' => array('label' => 'Width', 'default' => '100', 'form' => '[br][hr][h2]Facebook[/h2][br][label][number{width:80px;}]%[br]', 'format' => '%s%'),
-        'fbWidthMin' => array('label' => 'Min Width', 'default' => '300', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
-        'fbWidthMax' => array('label' => 'Max Width', 'default' => '500', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
-        'fbRatio' => array('label' => 'Ratio', 'default' => array(5, 8), 'form' => '[label][number{width:60px;}]:[number{width:60px;}][br][br]', 'format' => '%s:%s'),
-
-        'pdfWidth' => array('label' => 'Width', 'default' => '100', 'form' => '[br][hr][h2]PDF[/h2][br][label][number{width:80px;}]%[br]', 'format' => '%s%'),
-        'pdfWidthMin' => array('label' => 'Min Width', 'default' => '300', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
-        'pdfWidthMax' => array('label' => 'Max Width', 'default' => '2500', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
-        'pdfRatio' => array('label' => 'Ratio', 'default' => array(9, 12), 'form' => '[label][number{width:60px;}]:[number{width:60px;}][br][br]', 'format' => '%s:%s'),
-
-        'imgWidth' => array('label' => 'Width', 'default' => '100', 'form' => '[br][hr][h2]Image[/h2][br][label][number{width:80px;}]%[br]', 'format' => '%s%'),
-        'imgWidthMin' => array('label' => 'Min Width', 'default' => '300', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
-        'imgWidthMax' => array('label' => 'Max Width', 'default' => '2500', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
-        'imgRatio' => array('label' => 'Ratio', 'default' => array(16, 9), 'form' => '[label][number{width:60px;}]:[number{width:60px;}][br][br]', 'format' => '%s:%s'),
-
       );
-      return $optionList;
+
+
+      $this->addEmbedType('fb', array(
+        'max-width' => '500',
+        'ratio' => array(5, 8),
+      ));
+
+
+      $this->addEmbedType('pdf', array(
+        'max-width' => '500',
+        'ratio' => array(9, 12),
+      ));
+
+      $this->addEmbedType('img');
+
+
+      return $this->localOptionList;
     }
 
     // global settings shared by all plugins
