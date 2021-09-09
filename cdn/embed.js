@@ -52,6 +52,9 @@ SOFTWARE.
     'modifyClass': null, // optional [array] list of classes to override as an aspiesoft embed
     'modifyTag': null, // optional [array] list of tags to override as an aspiesoft embed
 
+    'includeDomains': null, // optional [array] list of domains to include (if not already supported) without smart methods to find the proper embedable url from that domain
+    // includeDomains will use the localhost method for embeds first, or fallback to a regular embed
+
     // exactType default settings (null to use above defaults)
     yt: null, // {width, min-width, max-width, ratio}
     fb: {'width': '100%', 'min-width': '300px', 'max-width': '500px', 'ratio': '5:8'},
@@ -61,27 +64,20 @@ SOFTWARE.
 
 
   const embedUrlHandler = {
-    'example.com': function(page, query) {
-      embedType = 'video'; // weather to embed a video, image, pdf, or embed (for regular iframe embed)
-      exactType = 'example'; // the exact type of embed to apply settings to
-
-      let isEmbed = false;
-
-      // do stuff to check if the url looks like an embed
-
-      if(isEmbed) {
-        url = 'https://example.com/videos/' + page;
-        return {url, embedType, exactType};
-      }
-
-      // return undefined if this url is not an embed and should be ignored
-      return; // can be ignored if last line in function
-    },
-
     'localhost': function(page, query) {
       if(!page || page.trim() === '') {
-        url = false;
         return;
+      }
+
+      let url = window.location.origin + '/' + page;
+      let key = Object.keys(query);
+      for(let i = 0; i < array.length; i++) {
+        if(i === 0) {
+          url += '?';
+        } else {
+          url += '&';
+        }
+        url += `${encodeURIComponent(key[i])}=${encodeURIComponent(query[key[i]])}`;
       }
 
       if(page.endsWith('.pdf')) {
@@ -94,6 +90,26 @@ SOFTWARE.
         return {url, embedType, exactType};
       }
     },
+
+    'simple-embed': function(page, query) {
+      let url = window.location.origin + '/' + page;
+
+      let url = window.location.origin + '/' + page;
+      let key = Object.keys(query);
+      for(let i = 0; i < array.length; i++) {
+        if(i === 0) {
+          url += '?';
+        } else {
+          url += '&';
+        }
+        url += `${encodeURIComponent(key[i])}=${encodeURIComponent(query[key[i]])}`;
+      }
+
+      embedType = 'embed';
+      exactType = 'default';
+      return {url, embedType, exactType};
+    },
+
 
     'youtu.be': function(page, query) {
       embedType = 'video';
@@ -170,7 +186,6 @@ SOFTWARE.
     'facebook.com': function(page, query) {
       if(page.includes('video')) {
         //todo: embed facebook video
-        url = false;
         return;
       }
 
@@ -191,8 +206,8 @@ SOFTWARE.
       exactType = 'fb';
       return {url, embedType, exactType};
     },
-
   };
+
 
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -577,6 +592,23 @@ SOFTWARE.
         if(!res) {
           url = false;
         } else if(typeof res === 'object') {
+          url = res.url || url;
+          embedType = res.embedType || embedType;
+          exactType = res.exactType || exactType;
+        }
+        return;
+      } else if((Array.isArray(defaultEmbedOptions.includeDomains) && defaultEmbedOptions.includeDomains.includes(domain))) {
+        let res = undefined;
+
+        if(typeof embedUrlHandler['localhost'] === 'function') {
+          res = embedUrlHandler['localhost'](page, query);
+        }
+
+        if(!res && typeof embedUrlHandler['simple-embed'] === 'function') {
+          res = embedUrlHandler['simple-embed'](page, query);
+        }
+
+        if(typeof res === 'object') {
           url = res.url || url;
           embedType = res.embedType || embedType;
           exactType = res.exactType || exactType;

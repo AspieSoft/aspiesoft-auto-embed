@@ -1,49 +1,51 @@
 <?php
-/**
-* @package AspieSoftAutoEmbed
-*/
 
-if(!defined('ABSPATH') || !current_user_can('manage_options')){
+/**
+ * @package AspieSoftAutoEmbed
+ */
+
+if (!defined('ABSPATH') || !current_user_can('manage_options')) {
   http_response_code(404);
   die('404 Not Found');
 }
 
-if(!class_exists('AspieSoft_AutoEmbed_Settings')){
+if (!class_exists('AspieSoft_AutoEmbed_Settings')) {
 
-  class AspieSoft_AutoEmbed_Settings{
+  class AspieSoft_AutoEmbed_Settings
+  {
 
     private $localOptionList;
 
-    private function addEmbedType($name, $default = null){
+    private function addEmbedType($name, $displayName, $default = null) {
       $sizes = array(
         'width' => '100',
         'min-width' => '300',
         'max-width' => '2500',
         'ratio' => array(16, 9),
       );
-      if(is_array($default)){
-        if($default['width'] !== null){
+      if (is_array($default)) {
+        if ($default['width'] !== null) {
           $sizes['width'] = $default['width'];
         }
-        if($default['min-width'] !== null){
+        if ($default['min-width'] !== null) {
           $sizes['min-width'] = $default['min-width'];
         }
-        if($default['max-width'] !== null){
+        if ($default['max-width'] !== null) {
           $sizes['max-width'] = $default['max-width'];
         }
-        if($default['ratio'] !== null){
+        if ($default['ratio'] !== null) {
           $sizes['ratio'] = $default['ratio'];
         }
       }
 
-      $this->localOptionList[$name.'Width'] = array('label' => 'Width', 'default' => '100', 'form' => '[br][hr][h2]Image[/h2][br][label][number{width:80px;}]%[br]', 'format' => '%s%');
+      $this->localOptionList[$name . 'Width'] = array('label' => 'Width', 'default' => '100', 'form' => '[br][hr][h2]' . $displayName . '[/h2][br][label][number{width:80px;}]%[br]', 'format' => '%s%');
       $this->localOptionList[$name . 'WidthMin'] = array('label' => 'Min Width', 'default' => '300', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx');
       $this->localOptionList[$name . 'WidthMax'] = array('label' => 'Max Width', 'default' => '2500', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx');
       $this->localOptionList[$name . 'Ratio'] = array('label' => 'Ratio', 'default' => array(16, 9), 'form' => '[label][number{width:60px;}]:[number{width:60px;}][br][br]', 'format' => '%s:%s');
     }
 
     // settings for admin page (client side assets/settings.js file reads this, and loads html inputs from it)
-    public function getOptionList(){
+    public function getOptionList() {
       $this->localOptionList = array(
         'jsdelivr' => array('label' => 'Load Assets From', 'default' => 'default', 'form' => '[label][select][br]', 'type' => 'select', 'options' => array(
           'default' => 'Default',
@@ -57,6 +59,15 @@ if(!class_exists('AspieSoft_AutoEmbed_Settings')){
 
         'altShortcode_default' => array('label' => 'Alternate Shortcode Name', 'default' => '', 'form' => '[label][text][br]'),
         'altShortcode' => array('label' => 'Alternate YouTube Shortcode Name', 'default' => '', 'form' => '[label][text][br][br]'),
+
+
+        'includeDomains' => array('label' => 'Additional Embed Domains', 'default' => 'example.com', 'form' => '[hr][br][h2][label][/h2][h4]A list of domains this plugin doesn\'t support, that you would like to auto embed (one per line)[/h4][textarea][br]', 'type' => 'textarea'),
+
+        'defaultEmbedWidth' => array('label' => 'Width', 'default' => '100', 'form' => '[br][hr][h2]Default[/h2][br][label][number{width:80px;}]%[br]', 'format' => '%s%'),
+        'defaultEmbedWidthMin' => array('label' => 'Min Width', 'default' => '300', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
+        'defaultEmbedWidthMax' => array('label' => 'Max Width', 'default' => '2500', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
+        'defaultEmbedRatio' => array('label' => 'Ratio', 'default' => array(16, 9), 'form' => '[label][number{width:60px;}]:[number{width:60px;}][br][br]', 'format' => '%s:%s'),
+
 
         'embedWidth' => array('label' => 'Width', 'default' => '100', 'form' => '[br][hr][h2]YouTube[/h2][br][label][number{width:80px;}]%[br]', 'format' => '%s%'),
         'embedWidthMin' => array('label' => 'Min Width', 'default' => '300', 'form' => '[label][number{width:80px;}]px[br]', 'format' => '%spx'),
@@ -76,25 +87,25 @@ if(!class_exists('AspieSoft_AutoEmbed_Settings')){
       );
 
 
-      $this->addEmbedType('fb', array(
+      $this->addEmbedType('fb', 'Facebook', array(
         'max-width' => '500',
         'ratio' => array(5, 8),
       ));
 
 
-      $this->addEmbedType('pdf', array(
+      $this->addEmbedType('pdf', 'PDF', array(
         'max-width' => '500',
         'ratio' => array(9, 12),
       ));
 
-      $this->addEmbedType('img');
+      $this->addEmbedType('img', 'Image');
 
 
       return $this->localOptionList;
     }
 
     // global settings shared by all plugins
-    public function getOptionListGlobal(){
+    public function getOptionListGlobal() {
       $optionList = array(
         'jsdelivr' => array('label' => 'Load Assets From', 'default' => 'local', 'form' => '[label][select][br][hr]', 'type' => 'select', 'options' => array(
           'local' => 'Your Site',
@@ -103,9 +114,7 @@ if(!class_exists('AspieSoft_AutoEmbed_Settings')){
       );
       return $optionList;
     }
-
   }
 
   $aspieSoft_AutoEmbed_Settings = new AspieSoft_AutoEmbed_Settings();
-
 }

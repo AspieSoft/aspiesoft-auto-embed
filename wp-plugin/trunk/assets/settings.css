@@ -9,6 +9,7 @@ body {
 
 #aspiesoft-admin-options-header {
   padding: 10px;
+  margin: 0;
   box-sizing: border-box;
   background: #ffffff;
   position: fixed;
@@ -77,6 +78,7 @@ body {
   font-size: 1.2em;
   font-weight: 400;
   padding: 5px;
+  box-sizing: border-box;
 }
 
 #aspiesoft-admin-options input, #aspiesoft-admin-options textarea {
@@ -84,6 +86,14 @@ body {
   height: 28px;
   min-height: 28px;
   padding: 0 5px;
+  box-sizing: border-box;
+}
+
+#aspiesoft-admin-options textarea {
+  width: calc(100% - 12px);
+  max-width: 500px;
+  min-height: 200px;
+  padding: 5px 8px;
 }
 
 #aspiesoft-admin-options input[type="checkbox"], #aspiesoft-admin-options input[type=radio] {

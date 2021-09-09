@@ -142,7 +142,7 @@ if(!class_exists('AspieSoft_Settings')){
       $jsonOptions = $opts['json'];
       $jsonInfo = $opts['pluginInfo'];
 
-      $ver = '1.2';
+      $ver = '1.2.1';
 
       // styles
       wp_enqueue_style('toastr', plugins_url('/../assets/toastr/toastr.min.css', __FILE__), array(), '2.1.4');
