@@ -94,7 +94,6 @@ SOFTWARE.
     'simple-embed': function(page, query) {
       let url = window.location.origin + '/' + page;
 
-      let url = window.location.origin + '/' + page;
       let key = Object.keys(query);
       for(let i = 0; i < array.length; i++) {
         if(i === 0) {
