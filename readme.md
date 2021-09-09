@@ -13,7 +13,7 @@ This plugin works kind of like that, while also working with playlists, live str
 YouTube has an organized url system, and this plugin recognizes it.
 Every youtube playlist id starts with "PL", and youtube uses many other consistent url methods like this.
 
-Now supports local pdf embeds.
+**Now allows optional overriding of iframes!**
 
 ## CDN Installation
 
@@ -78,6 +78,9 @@ AspieSoftAutoEmbedOptions = {
   'ignoreAttrs': ['class', 'id', 'name', 'target'], // optional [array] list of attributes to ignore
   'ignoreClass': null, // optional [array] list of classes to ignore (reverses to required if ignoreAttrs includes "class")
   'requireAttrs': null, // optional [array] list of attributes to require
+
+  'modifyClass': null, // optional [array] list of classes to override as an aspiesoft embed
+  'modifyTag': null, // optional [array] list of tags to override as an aspiesoft embed
 
 
   yt: { // seperate options for youtube embeds

@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-; (function() {
+;(function() {
 
   const $ = (function() {
     if(typeof jQuery !== 'undefined') {
@@ -48,6 +48,9 @@ SOFTWARE.
     'ignoreAttrs': ['class', 'id', 'name', 'target'], // optional [array] list of attributes to ignore
     'ignoreClass': null, // optional [array] list of classes to ignore (reverses to required if ignoreAttrs includes "class")
     'requireAttrs': null, // optional [array] list of attributes to require
+
+    'modifyClass': null, // optional [array] list of classes to override as an aspiesoft embed
+    'modifyTag': null, // optional [array] list of tags to override as an aspiesoft embed
 
     // exactType default settings (null to use above defaults)
     yt: null, // {width, min-width, max-width, ratio}
@@ -159,6 +162,8 @@ SOFTWARE.
         let v = query.v;
         url = 'https://www.youtube.com/embed/' + v + '?t=0';
         return {url, embedType, exactType};
+      } else if(page.startsWith('embed/') && typeof embedUrlHandler['youtu.be'] === 'function') {
+        return embedUrlHandler['youtu.be'](page.replace('embed/', ''), query);
       }
     },
 
@@ -193,7 +198,7 @@ SOFTWARE.
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  function mergeObj(obj1, obj2){
+  function mergeObj(obj1, obj2) {
     let objI = false, objSize;
     if(Array.isArray(obj1)) {
       objSize = obj1.length;
@@ -221,19 +226,54 @@ SOFTWARE.
   }
 
   $(document).ready(function() {
-    embedLinks();
-    setInterval(embedLinks, 100);
+    let cSel = undefined;
+    let tSel = undefined;
+    if(Array.isArray(defaultEmbedOptions.modifyClass)) {
+      cSel = defaultEmbedOptions.modifyClass.map(c => '.' + c).join(', ');
+    }
+    if(Array.isArray(defaultEmbedOptions.modifyTag)) {
+      tSel = defaultEmbedOptions.modifyTag.join(', ');
+    }
+
+
+    embedLinks(cSel, tSel);
+
+    if(cSel || tSel) {
+      setInterval(function() {embedLinks(cSel, tSel)}, 500);
+    } else {
+      setInterval(embedLinks, 500);
+    }
+
     setInterval(fixEmbedRatio, 100);
   });
 
-  function embedLinks(){
-    $('a').each(async function(){
+
+  function embedLinks(classSel, tagSel) {
+    let sel = 'a'
+    if(classSel) {
+      sel += ', ' + classSel;
+    }
+    if(tagSel) {
+      sel += ', ' + tagSel;
+    }
+    $(sel).each(async function() {
       let elm = this;
 
-      if(elm.hasAttribute('auto-embed-checked') || elm.hasAttribute('ignore')) {
+      if(elm.hasAttribute('auto-embed-checked') || elm.hasAttribute('ignore') || elm.classList.contains('aspiesoft-embed') || elm.classList.contains('aspiesoft-embed-content')) {
         return;
-      }else{
+      } else {
         elm.setAttribute('auto-embed-checked', '');
+      }
+
+
+      let isClassSel = false;
+      if(classSel && elm.classList.length && Array.isArray(defaultEmbedOptions.modifyClass)) {
+        for(let i = 0; i < defaultEmbedOptions.modifyClass.length; i++) {
+          if(elm.classList.contains(defaultEmbedOptions.modifyClass[i])) {
+            isClassSel = true;
+            break;
+          }
+        }
       }
 
 
@@ -247,7 +287,7 @@ SOFTWARE.
 
       if(Array.isArray(defaultEmbedOptions.ignoreAttrs)) {
         for(let i in defaultEmbedOptions.ignoreAttrs) {
-          if(defaultEmbedOptions.ignoreAttrs[i] === 'class') {
+          if(!isClassSel && defaultEmbedOptions.ignoreAttrs[i] === 'class') {
             if(elm.classList.length) {
               if(Array.isArray(defaultEmbedOptions.ignoreClass)) {
                 for(let c in defaultEmbedOptions.ignoreClass) {
@@ -259,13 +299,13 @@ SOFTWARE.
                 return;
               }
             }
-          } else if(elm.hasAttribute(defaultEmbedOptions.ignoreAttrs[i])) {
+          } else if(defaultEmbedOptions.ignoreAttrs[i] !== 'class' && elm.hasAttribute(defaultEmbedOptions.ignoreAttrs[i])) {
             return;
           }
         }
       }
 
-      if(Array.isArray(defaultEmbedOptions.ignoreClass) && (!Array.isArray(defaultEmbedOptions.ignoreAttrs) || !defaultEmbedOptions.ignoreAttrs.includes('class'))) {
+      if(!isClassSel && Array.isArray(defaultEmbedOptions.ignoreClass) && (!Array.isArray(defaultEmbedOptions.ignoreAttrs) || !defaultEmbedOptions.ignoreAttrs.includes('class'))) {
         for(let c in defaultEmbedOptions.ignoreClass) {
           if(elm.classList.contains(defaultEmbedOptions.ignoreClass[c])) {
             return;
@@ -275,21 +315,54 @@ SOFTWARE.
 
 
       let url = $(elm).attr('href');
+      if(!url || url.trim() === ''){
+        url = $(elm).attr('src');
+      }
+
+
+      let inClassElm = undefined;
+      if(!url || url.trim() === '' && isClassSel) {
+        inClassElm = $('a, ' + tagSel, elm);
+        url = inClassElm.attr('href');
+        if(!url || url.trim() === '') {
+          url = inClassElm.attr('src');
+        }
+      }
+
       if(!url || url.trim() === '') {
         return;
       }
 
+
       let title = $(elm).text();
-      if(!title || title.trim() === '' || title === url) {
+      if(inClassElm || !title || title.trim() === '' || title === url) {
         title = $(elm).attr('title');
         if(!title || title.trim() === '') {
           title = undefined;
         }
       }
 
+      if(!title && inClassElm) {
+        title = inClassElm.text();
+        if(!title || title.trim() === '' || title === url) {
+          title = inClassElm.attr('title');
+          if(!title || title.trim() === '') {
+            title = undefined;
+          }
+        }
+      }
+
       let description = $(elm).attr('description');
       if(!description || description.trim() === '') {
         description = $(elm).attr('desc');
+        if(!description || description.trim() === '') {
+          description = undefined;
+        }
+      }
+
+      if(!description && inClassElm) {
+        let tElm = $('a, ' + tagSel, elm);
+        description = tElm.attr('desc');
         if(!description || description.trim() === '') {
           description = undefined;
         }
@@ -305,7 +378,7 @@ SOFTWARE.
 
       let attrs = '';
       let styles = ' style="opacity:0;height:0;';
-      let youtubeQueryAttrs = '&rel=0&autohide=1&showinfo=0';
+      let youtubeQueryAttrs = '&rel=0&autohide=1&showinfo=0&feature=oembed';
       if(!data.attrs) {
         data.attrs = {...defaultEmbedOptions};
       } else {
@@ -398,7 +471,7 @@ SOFTWARE.
       let iframe = undefined;
       if(data.embedType === 'video') {
         data.url = data.url.replace(/\\?"/g, '\\"') + youtubeQueryAttrs;
-        iframe = $('<div class="aspiesoft-embed" doing-init-animation' + attrs + styles + '><iframe class="aspiesoft-embed-content" style="opacity: 0;" src="' + data.url + '" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>').insertAfter(elm);
+        iframe = $('<div class="aspiesoft-embed" doing-init-animation' + attrs + styles + '><iframe class="aspiesoft-embed-content" style="opacity: 0;" src="' + data.url + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>').insertAfter(elm);
       } else if(data.embedType === 'embed') {
         iframe = $('<div class="aspiesoft-embed" doing-init-animation' + attrs + styles + '><iframe class="aspiesoft-embed-content" style="opacity: 0;" src="' + data.url + '" frameborder="0" allowfullscreen allow="encrypted-media" allowtransparency="true"></iframe></div>').insertAfter(elm);
         iframe.css('border-radius', '5px');
@@ -490,20 +563,20 @@ SOFTWARE.
         // if local site
         if(typeof embedUrlHandler['localhost'] === 'function') {
           let res = embedUrlHandler['localhost'](page, query);
-          if(!res){
+          if(!res) {
             url = false;
-          }else if(typeof res === 'object'){
+          } else if(typeof res === 'object') {
             url = res.url || url;
             embedType = res.embedType || embedType;
             exactType = res.exactType || exactType;
           }
         }
         return;
-      }else if(typeof embedUrlHandler[domain] === 'function'){
+      } else if(typeof embedUrlHandler[domain] === 'function') {
         let res = embedUrlHandler[domain](page, query);
-        if(!res){
+        if(!res) {
           url = false;
-        }else if(typeof res === 'object') {
+        } else if(typeof res === 'object') {
           url = res.url || url;
           embedType = res.embedType || embedType;
           exactType = res.exactType || exactType;
@@ -513,10 +586,10 @@ SOFTWARE.
 
       url = false;
     });
-    if(!url){
+    if(!url) {
       return false;
     }
-    if(queryObject){
+    if(queryObject) {
       attrs = queryObject;
     }
     return {url, attrs, embedType, exactType};

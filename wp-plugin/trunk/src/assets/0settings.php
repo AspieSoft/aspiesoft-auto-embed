@@ -63,6 +63,11 @@ if(!class_exists('AspieSoft_AutoEmbed_AssetSettings')){
         $this->opts['requireAttrs'] = array('yt-auto-embed');
       }
 
+      if($options['get']('overrideIframes', false, true)){
+        $this->opts['modifyClass'] = array('nv-iframe-embed');
+        $this->opts['modifyTag'] = array('iframe');
+      }
+
 
       $this->addEmbedType('fb', $options);
 

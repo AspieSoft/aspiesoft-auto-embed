@@ -3,7 +3,7 @@ Contributors: AspieSoft
 Tags: youtube, embed, auto, pdf, image, img, webP, dynamic, simple, lazy-load, css
 Requires at least: 3.0.1
 Tested up to: 5.8
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 Requires PHP: 5.2.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -72,6 +72,9 @@ Any url that points to the current domain and ends with ".pdf" will automaticall
 
 == Changelog ==
 
+= 1.4.2 =
+Added optional overriding of iframes and wp-embed
+
 = 1.4 =
 Added option to only embed shortcodes
 
@@ -89,6 +92,9 @@ Added option to load scripts and styles from jsdelivr.net (can improve performan
 Initial Commit
 
 == Upgrade Notice ==
+
+= 1.4.2 =
+Added optional overriding of iframes and wp-embed
 
 = 1.4 =
 Added option to only embed shortcodes
