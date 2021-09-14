@@ -71,7 +71,7 @@ SOFTWARE.
 
       let url = window.location.origin + '/' + page;
       let key = Object.keys(query);
-      for(let i = 0; i < array.length; i++) {
+      for(let i = 0; i < key.length; i++) {
         if(i === 0) {
           url += '?';
         } else {
@@ -95,7 +95,7 @@ SOFTWARE.
       let url = window.location.origin + '/' + page;
 
       let key = Object.keys(query);
-      for(let i = 0; i < array.length; i++) {
+      for(let i = 0; i < key.length; i++) {
         if(i === 0) {
           url += '?';
         } else {

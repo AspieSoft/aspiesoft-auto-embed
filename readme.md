@@ -23,7 +23,7 @@ Every youtube playlist id starts with "PL", and youtube uses many other consiste
 <!-- or alternatively jqAlt (by AspieSoft) - v0.0.16 (alpha) or later -->
 <script src="https://cdn.jsdelivr.net/gh/AspieSoft/jqalt@0.0.16/jqalt/index.js"></script>
 
-<script src="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed@1.4.4/cdn/embed.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed@1.4.5/cdn/embed.js"></script>
 ```
 
 ---
