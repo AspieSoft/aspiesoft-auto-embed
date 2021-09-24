@@ -80,7 +80,7 @@ if (!class_exists('AspieSoft_AutoEmbed_AssetSettings')) {
 
 
       $includeDomains = $options['get']('includeDomains');
-      if ($includeDomains !== 'example.com') {
+      if ($includeDomains && $includeDomains !== 'example.com') {
         if(str_starts_with($includeDomains, '[') && str_ends_with($includeDomains, ']')){
           try{
             $this->opts['includeDomains'] = json_decode(preg_replace('/\\([\\"])/', '$1', $includeDomains));
