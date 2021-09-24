@@ -70,7 +70,7 @@ if (!class_exists('AspieSoft_AutoEmbed_AssetSettings')) {
 
       // only embed shortcode
       if ($options['get']('ytOnlyEmbedShortcode', false, true)) {
-        $this->opts['requireAttrs'] = array('yt-auto-embed');
+        $this->opts['requireAttrs'] = array('aspiesoft-auto-embed');
       }
 
       if ($options['get']('overrideIframes', false, true)) {
@@ -81,7 +81,13 @@ if (!class_exists('AspieSoft_AutoEmbed_AssetSettings')) {
 
       $includeDomains = $options['get']('includeDomains');
       if ($includeDomains !== 'example.com') {
-        $this->opts['includeDomains'] = explode('\n', $includeDomains);
+        if(str_starts_with($includeDomains, '[') && str_ends_with($includeDomains, ']')){
+          try{
+            $this->opts['includeDomains'] = json_decode(preg_replace('/\\([\\"])/', '$1', $includeDomains));
+          }catch(Exception $e){}
+        }else{
+          $this->opts['includeDomains'] = explode('\n', $includeDomains);
+        }
       }
 
 

@@ -55,7 +55,9 @@ if (!class_exists('AspieSoft_AutoEmbed_Settings')) {
 
         'disableWpEmbed' => array('label' => 'Disable Wp-Embed', 'default' => 'false', 'form' => '[check][label][br]', 'type' => 'bool'),
         'enableEditorAutoUrl' => array('label' => 'Automatically Make URLs Clickable In Page Editor', 'default' => 'false', 'form' => '[check][label][br][br]', 'type' => 'bool'),
+        
         'overrideIframes' => array('label' => 'Override Compatable Iframes Including WP-Embed Iframes', 'default' => 'false', 'form' => '[check][label][br][br]', 'type' => 'bool'),
+        'ytOnlyEmbedShortcode' => array('label' => 'Only Embed Shortcodes', 'default' => 'false', 'form' => '[check][label][br][br]', 'type' => 'bool'),
 
         'altShortcode_default' => array('label' => 'Alternate Shortcode Name', 'default' => '', 'form' => '[label][text][br]'),
         'altShortcode' => array('label' => 'Alternate YouTube Shortcode Name', 'default' => '', 'form' => '[label][text][br][br]'),
@@ -81,8 +83,6 @@ if (!class_exists('AspieSoft_AutoEmbed_Settings')) {
         )),
         'embedAuto' => array('label' => 'Auto Play', 'default' => 'false', 'form' => '[check][label]', 'type' => 'bool'),
         'embedMute' => array('label' => 'Mute', 'default' => 'false', 'form' => '[check][label][br]', 'type' => 'bool'),
-
-        'ytOnlyEmbedShortcode' => array('label' => 'Only Embed Shortcodes', 'default' => 'false', 'form' => '[check][label][br]', 'type' => 'bool'),
 
       );
 

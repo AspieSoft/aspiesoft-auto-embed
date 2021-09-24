@@ -143,7 +143,7 @@ if(!class_exists('AspieSoft_AutoEmbed_Main')){
       }
 
       if(self::$options['get']('ytOnlyEmbedShortcode', false, true)){
-        $result .= ' yt-auto-embed';
+        $result .= ' aspiesoft-auto-embed';
       }
 
       $result .= '>';

@@ -58,14 +58,27 @@
       }
     }
 
+
     let valueAttr = '';
     if(value && type !== 'bool'){
+      if(value.startsWith('[') && value.endsWith(']')){
+        try{
+          value = JSON.parse(value.replace(/\\([\\"])/g, '$1')).join('\n').trim();
+        }catch(e){}
+      }
+
       value = value.replace(/\\?"/g, '\\"');
       valueAttr = ' value="'+value+'"';
     }
 
     let defValueAttr = '';
     if(defaultValue && type !== 'bool'){
+      if(defaultValue.startsWith('[') && defaultValue.endsWith(']')) {
+        try {
+          defaultValue = JSON.parse(defaultValue.replace(/\\([\\"])/g, '$1')).join('\n').trim();
+        } catch(e) {}
+      }
+
       defaultValue = defaultValue.replace(/\\?"/g, '\\"');
       defValueAttr = ' placeholder="'+defaultValue+'"';
     }
@@ -91,8 +104,11 @@
     }else if(inputType === 'textarea'){
 
       let origValue = '';
-      if(value !== ''){origValue = ' origValue="'+value+'"';}
-      return '<textarea name="'+name+'"'+valueAttr+defValueAttr+origValue+style+'></textarea>';
+      if(value !== '') {origValue = ' origValue="' + value + '"';}
+
+      if(value === defaultValue){value = '';}
+
+      return '<textarea type="' + inputType + '" name="' + name + '"' + defValueAttr + origValue + style + '>' + value.replace(/<\/textarea>/g, '')+'\n' +'</textarea>';
 
     }else if(inputType === 'select' && optionsList){
 
@@ -267,6 +283,15 @@
         //let origValue = $(this).attr('origValue');
         let defaultValue = optionsList[name]['default'];
 
+        if(elmTag === 'textarea') {
+          defaultValue = defaultValue.split(/\r?\n/).filter(val => val.trim() !== '');
+          if(!defaultValue.length) {
+            defaultValue = '';
+          } else {
+            defaultValue = JSON.stringify(defaultValue);
+          }
+        }
+
         if(elmType === 'checkbox'){
           if(defaultValue === true || defaultValue === 1 || (typeof defaultValue === 'string' && defaultValue.match(/^true$/i))){
             this.checked = true;
@@ -399,7 +424,7 @@
       if(!elmTag){return;}
       elmTag = elmTag.toLowerCase();
       if(elmType){elmType = elmType.toLowerCase();}else{elmType = '';}
-      
+
       // don't run for hidden, button, and submit input types
       if(elmTag === 'input' && (elmType === 'hidden' || elmType === 'button' || elmType === 'submit')){
         return;
@@ -462,6 +487,30 @@
       // get value
       let value = $(this).val();
       let origValue = $(this).attr('origValue');
+
+      if(elmTag === 'textarea'){
+        value = value.split(/\r?\n/).filter(val => val.trim() !== '');
+        if(!value.length){
+          value = '';
+        }else{
+          value = JSON.stringify(value);
+        }
+
+        origValue = origValue.split(/\r?\n/).filter(val => val.trim() !== '');
+        if(!origValue.length) {
+          origValue = '';
+        } else {
+          origValue = JSON.stringify(origValue);
+        }
+
+        if($(this).attr('placeholder') === value){
+          value = '';
+        }
+
+        if($(this).attr('placeholder') !== origValue) {
+          origValue = 'null';
+        }
+      }
 
       // add value to builder
       if(optionName === name){
