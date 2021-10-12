@@ -63,6 +63,8 @@ if(!class_exists('AspieSoft_AutoEmbed_Main')){
         'search' => false,
         'title' => false, 'name' => false,
         'description' => false, 'desc' => false,
+        'start' => false,
+        'stop' => false,
       ), $atts);
 
       $attr = self::$func::cleanShortcodeAtts($attr);
@@ -96,6 +98,8 @@ if(!class_exists('AspieSoft_AutoEmbed_Main')){
         'search' => false,
         'title' => false, 'name' => false,
         'description' => false, 'desc' => false,
+        'start' => false,
+        'stop' => false,
       ), $atts);
 
       $attr = self::$func::cleanShortcodeAtts($attr);
@@ -126,6 +130,8 @@ if(!class_exists('AspieSoft_AutoEmbed_Main')){
         $this->setQueryAttrBool($attr, 'live', array('live')),
         $this->setQueryAttrBool($attr, 'popular', array('popular')),
         $this->setQueryAttrBool($attr, 'search', array('search')),
+        $this->setQueryAttrValue($attr, 'start', array('start')),
+        $this->setQueryAttrValue($attr, 'stop', array('stop')),
       );
       $queryAttrs = array_filter($queryAttrs);
 
@@ -158,7 +164,7 @@ if(!class_exists('AspieSoft_AutoEmbed_Main')){
 
     function setQueryAttrValue($attr, $key, $values){
       foreach($values as $v){
-        if($attr[$v]){
+        if($attr[$v] && $attr[$v] !== false && $attr[$v] !== 'false'){
           settype($attr[$v], 'string');
           return $key.'='.urlencode($attr[$v]);
         }

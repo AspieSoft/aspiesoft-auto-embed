@@ -23,7 +23,7 @@ Every youtube playlist id starts with "PL", and youtube uses many other consiste
 <!-- or alternatively jqAlt (by AspieSoft) - v0.0.16 (alpha) or later -->
 <script src="https://cdn.jsdelivr.net/gh/AspieSoft/jqalt@0.0.16/jqalt/index.js"></script>
 
-<script src="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed@1.4.7/cdn/embed.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed@1.4.8/cdn/embed.js"></script>
 ```
 
 ---
@@ -55,7 +55,9 @@ Just put a clickable link to the video/playlist/channel, and the plugin will do 
   mute="<optional mute video> default: false"
   live="<optional embed live video> default: false"
   popular="<optional embed popular uploads playlist> default: false"
-  search="optional embed playlist based on a youtube search (default: false)"
+  search="<optional embed playlist based on a youtube search> default: false"
+  start="<optional time to start video at>"
+  end="<optional time to end video at>"
 ]
 ```
 
@@ -145,6 +147,13 @@ AspieSoftAutoEmbedOptions = {
 ### How to embed a playlist based on a youtube search
 
 > Set the link to "https://youtu.be/<insert search query>?search=1"
+
+---
+
+### How to embed a video at a specific time
+
+> Add "?start=\<start time (example 1:15)>" to the url.
+> Add "?end=\<end time (example 2:45)>" to the url.
 
 ---
 

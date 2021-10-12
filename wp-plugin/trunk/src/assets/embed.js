@@ -39,7 +39,7 @@ SOFTWARE.
 
 
   let defaultEmbedOptions = {
-    'width': '100%',
+    'width': '90%',
     'min-width': '300px',
     'max-width': '2500px',
     'ratio': '16:9',
@@ -284,13 +284,13 @@ SOFTWARE.
       }
 
 
-      if(defaultEmbedOptions.ignoreHeaders){
+      if(defaultEmbedOptions.ignoreHeaders) {
         // ignore header and footer
         if(isJquery) {
           if($(elm).parents('header').length || $(elm).parents('footer').length) {
             return;
           }
-        }else{
+        } else {
           if($(elm).parent('header').length || $(elm).parent('footer').length) {
             return;
           }
@@ -488,6 +488,29 @@ SOFTWARE.
         }
       } else if(data.embedType === 'video' && data.attrs.mute && data.attrs.mute !== '0') {
         youtubeQueryAttrs += '&mute=1';
+      }
+
+      if(data.attrs['start']) {
+        if(data.attrs['start'].includes(':')) {
+          let time = data.attrs['start'].split(':');
+          youtubeQueryAttrs += '&start=' + ((Number(time[0]) * 60) + Number(time[1])) + 's';
+        } else if(!data.attrs['start'].endsWith('s')) {
+          youtubeQueryAttrs += '&start=' + data.attrs['start'] + 's';
+        } else {
+          youtubeQueryAttrs += '&start=' + data.attrs['start'];
+        }
+      }
+      if(data.attrs['end']) {
+        if(data.attrs['end'].includes(':')) {
+          let time = data.attrs['end'].split(':');
+          youtubeQueryAttrs += '&end=' + ((Number(time[0]) * 60) + Number(time[1])) + 's';
+        } else if(!data.attrs['end'].endsWith('s')) {
+          youtubeQueryAttrs += '&end=' + data.attrs['end'] + 's';
+        } else {
+          youtubeQueryAttrs += '&end=' + data.attrs['end'];
+        }
+        //youtubeQueryAttrs += '&version=3';
+        data.url.replace(/\?t=0&/, '?version=3&').replace(/\?(.*?)&t=0&/, '$1&version=3&');
       }
 
       if(!title && (data.attrs.title || data.attrs.name)) {
