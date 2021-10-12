@@ -24,8 +24,11 @@ SOFTWARE.
 
 ; (function() {
 
+  let isJquery = true;
+
   const $ = (function() {
     if(typeof jQuery !== 'undefined') {
+      isJquery = true;
       return jQuery;
     } else if(typeof jqAlt !== 'undefined') {
       return jqAlt.jquery();
@@ -48,6 +51,7 @@ SOFTWARE.
     'ignoreAttrs': ['class', 'id', 'name', 'target'], // optional [array] list of attributes to ignore
     'ignoreClass': null, // optional [array] list of classes to ignore (reverses to required if ignoreAttrs includes "class")
     'requireAttrs': null, // optional [array] list of attributes to require
+    'ignoreHeaders': true, // ignore embedable links if inside a header or footer
 
     'modifyClass': null, // optional [array] list of classes to override as an aspiesoft embed
     'modifyTag': null, // optional [array] list of tags to override as an aspiesoft embed
@@ -277,6 +281,20 @@ SOFTWARE.
         return;
       } else {
         elm.setAttribute('auto-embed-checked', '');
+      }
+
+
+      if(defaultEmbedOptions.ignoreHeaders) {
+        // ignore header and footer
+        if(isJquery) {
+          if($(elm).parents('header').length || $(elm).parents('footer').length) {
+            return;
+          }
+        } else {
+          if($(elm).parent('header').length || $(elm).parent('footer').length) {
+            return;
+          }
+        }
       }
 
 

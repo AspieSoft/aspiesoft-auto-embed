@@ -23,7 +23,7 @@ Every youtube playlist id starts with "PL", and youtube uses many other consiste
 <!-- or alternatively jqAlt (by AspieSoft) - v0.0.16 (alpha) or later -->
 <script src="https://cdn.jsdelivr.net/gh/AspieSoft/jqalt@0.0.16/jqalt/index.js"></script>
 
-<script src="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed@1.4.6/cdn/embed.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/AspieSoft/aspiesoft-auto-embed@1.4.7/cdn/embed.js"></script>
 ```
 
 ---
@@ -78,6 +78,7 @@ AspieSoftAutoEmbedOptions = {
   'ignoreAttrs': ['class', 'id', 'name', 'target'], // optional [array] list of attributes to ignore
   'ignoreClass': null, // optional [array] list of classes to ignore (reverses to required if ignoreAttrs includes "class")
   'requireAttrs': null, // optional [array] list of attributes to require
+  'ignoreHeaders': true, // ignore embedable links if inside a header or footer
 
   'modifyClass': null, // optional [array] list of classes to override as an aspiesoft embed
   'modifyTag': null, // optional [array] list of tags to override as an aspiesoft embed

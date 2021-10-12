@@ -101,9 +101,6 @@ if(!class_exists('AspieSoft_Settings')){
         exit();
       }else{ // load settings form
         $jsonOptions = array();
-        /*foreach($optionListGlobal as $k => $v){
-          $jsonOptions['AspieSoft_Option_'.$k] = $v;
-        }*/
         foreach($optionList as $k => $v){
           $jsonOptions['AspieSoft_Option_'.$k] = $v;
         }

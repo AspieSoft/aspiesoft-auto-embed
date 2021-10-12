@@ -30,7 +30,7 @@ if (!class_exists('AspieSoft_AutoEmbed_AssetSettings')) {
 
 
     private function addEmbedType($name, $options) {
-      $this->opts['fb'] = array(
+      $this->opts[$name] = array(
         'width' => $options['get']($name . 'Width'),
         'min-width' => $options['get']($name . 'WidthMin'),
         'max-width' => $options['get']($name . 'WidthMax'),
@@ -81,7 +81,7 @@ if (!class_exists('AspieSoft_AutoEmbed_AssetSettings')) {
 
       $includeDomains = $options['get']('includeDomains');
       if ($includeDomains && $includeDomains !== 'example.com') {
-        if(str_starts_with($includeDomains, '[') && str_ends_with($includeDomains, ']')){
+        if(self::$func::startsWith($includeDomains, '[') && self::$func::endsWith($includeDomains, ']')){
           try{
             $this->opts['includeDomains'] = json_decode(preg_replace('/\\([\\"])/', '$1', $includeDomains));
           }catch(Exception $e){}
