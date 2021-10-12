@@ -64,7 +64,7 @@ if(!class_exists('AspieSoft_AutoEmbed_Main')){
         'title' => false, 'name' => false,
         'description' => false, 'desc' => false,
         'start' => false,
-        'stop' => false,
+        'end' => false,
       ), $atts);
 
       $attr = self::$func::cleanShortcodeAtts($attr);
@@ -99,7 +99,7 @@ if(!class_exists('AspieSoft_AutoEmbed_Main')){
         'title' => false, 'name' => false,
         'description' => false, 'desc' => false,
         'start' => false,
-        'stop' => false,
+        'end' => false,
       ), $atts);
 
       $attr = self::$func::cleanShortcodeAtts($attr);
@@ -131,7 +131,7 @@ if(!class_exists('AspieSoft_AutoEmbed_Main')){
         $this->setQueryAttrBool($attr, 'popular', array('popular')),
         $this->setQueryAttrBool($attr, 'search', array('search')),
         $this->setQueryAttrValue($attr, 'start', array('start')),
-        $this->setQueryAttrValue($attr, 'stop', array('stop')),
+        $this->setQueryAttrValue($attr, 'end', array('end')),
       );
       $queryAttrs = array_filter($queryAttrs);
 

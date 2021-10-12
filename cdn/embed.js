@@ -47,6 +47,8 @@ SOFTWARE.
     'mute': '0',
     'popular': '0',
     'live': '0',
+    'start': null,
+    'end': null,
 
     'ignoreAttrs': ['class', 'id', 'name', 'target'], // optional [array] list of attributes to ignore
     'ignoreClass': null, // optional [array] list of classes to ignore (reverses to required if ignoreAttrs includes "class")
@@ -493,9 +495,9 @@ SOFTWARE.
       if(data.attrs['start']) {
         if(data.attrs['start'].includes(':')) {
           let time = data.attrs['start'].split(':');
-          youtubeQueryAttrs += '&start=' + ((Number(time[0]) * 60) + Number(time[1])) + 's';
-        } else if(!data.attrs['start'].endsWith('s')) {
-          youtubeQueryAttrs += '&start=' + data.attrs['start'] + 's';
+          youtubeQueryAttrs += '&start=' + ((Number(time[0]) * 60) + Number(time[1]));
+        } else if(data.attrs['start'].endsWith('s')) {
+          youtubeQueryAttrs += '&start=' + data.attrs['start'].replace(/s$/, '');
         } else {
           youtubeQueryAttrs += '&start=' + data.attrs['start'];
         }
@@ -503,9 +505,9 @@ SOFTWARE.
       if(data.attrs['end']) {
         if(data.attrs['end'].includes(':')) {
           let time = data.attrs['end'].split(':');
-          youtubeQueryAttrs += '&end=' + ((Number(time[0]) * 60) + Number(time[1])) + 's';
+          youtubeQueryAttrs += '&end=' + ((Number(time[0]) * 60) + Number(time[1]));
         } else if(!data.attrs['end'].endsWith('s')) {
-          youtubeQueryAttrs += '&end=' + data.attrs['end'] + 's';
+          youtubeQueryAttrs += '&end=' + data.attrs['end'].replace(/s$/, '');
         } else {
           youtubeQueryAttrs += '&end=' + data.attrs['end'];
         }
