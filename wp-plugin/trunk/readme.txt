@@ -73,7 +73,7 @@ Any url that points to the current domain and ends with ".pdf" will automaticall
 == Changelog ==
 
 = 1.4.7 =
-Added option to ignore links inside headers and footers
+Now ignores links inside headers and footers
 
 = 1.4.2 =
 Added optional overriding of iframes and wp-embed
@@ -97,7 +97,7 @@ Initial Commit
 == Upgrade Notice ==
 
 = 1.4.7 =
-Added option to ignore links inside headers and footers
+Now ignores links inside headers and footers
 
 = 1.4.2 =
 Added optional overriding of iframes and wp-embed
