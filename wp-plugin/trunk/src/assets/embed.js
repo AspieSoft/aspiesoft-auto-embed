@@ -70,12 +70,12 @@ SOFTWARE.
 
 
   const embedUrlHandler = {
-    'localhost': function(page, query) {
+    'localhost': function(page, query, domain) {
       if(!page || page.trim() === '') {
         return;
       }
 
-      let url = window.location.origin + '/' + page;
+      let url = window.location.protocol + '//' + domain + '/' + page;
       let key = Object.keys(query);
       for(let i = 0; i < key.length; i++) {
         if(i === 0) {
@@ -97,8 +97,8 @@ SOFTWARE.
       }
     },
 
-    'simple-embed': function(page, query) {
-      let url = window.location.origin + '/' + page;
+    'simple-embed': function(page, query, domain) {
+      let url = window.location.protocol + '//' + domain + '/' + page;
 
       let key = Object.keys(query);
       for(let i = 0; i < key.length; i++) {
@@ -277,8 +277,11 @@ SOFTWARE.
       sel += ', ' + tagSel;
     }
     $(sel).each(async function() {
-      let elm = this;
+      if(window.location.search.toString().match(/[?&]fl_builder/)){
+        return;
+      }
 
+      let elm = this;
       if(elm.hasAttribute('auto-embed-checked') || elm.hasAttribute('ignore') || elm.classList.contains('aspiesoft-embed') || elm.classList.contains('aspiesoft-embed-content')) {
         return;
       } else {
@@ -616,10 +619,10 @@ SOFTWARE.
         page = '';
       }
 
-      if(!domain || domain.trim() === '' || domain === window.location.hostname || window.location.hostname.endsWith(domain)) {
+      if(!domain || domain.trim() === '' || domain === window.location.hostname || window.location.hostname.endsWith(domain) || domain.endsWith(window.location.hostname.replace(/^www\./g, ''))) {
         // if local site
         if(typeof embedUrlHandler['localhost'] === 'function') {
-          let res = embedUrlHandler['localhost'](page, query);
+          let res = embedUrlHandler['localhost'](page, query, domain);
           if(!res) {
             url = false;
           } else if(typeof res === 'object') {
@@ -643,11 +646,11 @@ SOFTWARE.
         let res = undefined;
 
         if(typeof embedUrlHandler['localhost'] === 'function') {
-          res = embedUrlHandler['localhost'](page, query);
+          res = embedUrlHandler['localhost'](page, query, domain);
         }
 
         if(!res && typeof embedUrlHandler['simple-embed'] === 'function') {
-          res = embedUrlHandler['simple-embed'](page, query);
+          res = embedUrlHandler['simple-embed'](page, query, domain);
         }
 
         if(typeof res === 'object') {
