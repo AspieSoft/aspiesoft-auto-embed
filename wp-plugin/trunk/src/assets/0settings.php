@@ -90,9 +90,6 @@ if (!class_exists('AspieSoft_AutoEmbed_AssetSettings')) {
         }
       }
 
-
-      $this->addEmbedType('fb', $options);
-
       $this->addEmbedType('pdf', $options);
       $this->addEmbedType('img', $options);
 
