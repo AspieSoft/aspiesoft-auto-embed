@@ -1,6 +1,6 @@
 # Auto YouTube Embed
 
-Easily Embed Dynamic Youtube Videos Simply By Pasting The Url.
+Easily Embed Dynamic Youtube Videos And More Simply By Pasting The Url.
 
 Note: Requires jQuery (or AspieSoft jqAlt) To Run
 

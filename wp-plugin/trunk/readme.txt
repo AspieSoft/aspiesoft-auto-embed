@@ -1,4 +1,4 @@
-=== Auto Embed (YouTube, PDF, Custom, And More) ===
+=== Auto Embed ===
 Contributors: AspieSoft
 Tags: youtube, embed, auto, pdf, dynamic, simple, lazy-load, css
 Requires at least: 3.0.1
@@ -10,7 +10,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://buymeacoffee.aspiesoft.com
 
 == Description ==
-Easily Embed Dynamic Lazy Loading Youtube Videos Simply By Pasting The Url.
+Easily Embed Dynamic Lazy Loading Youtube Videos And More Simply By Pasting The Url.
 
 This plugin does most of the work client side, and waits for the page to finish loading so embeds do not slow down your site.
 Shortcodes are not needed (but are available), just add a clickable link to the youtube video, and the plugin will find all the youtube.com and youtu.be links, and replace them with an embed.
