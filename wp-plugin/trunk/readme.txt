@@ -1,6 +1,6 @@
 === Auto Embed (YouTube, PDF, Custom, And More) ===
 Contributors: AspieSoft
-Tags: youtube, embed, auto, pdf, image, img, webP, dynamic, simple, lazy-load, css
+Tags: youtube, embed, auto, pdf, dynamic, simple, lazy-load, css
 Requires at least: 3.0.1
 Tested up to: 5.9
 Stable tag: 1.5
@@ -15,7 +15,7 @@ Easily Embed Dynamic Lazy Loading Youtube Videos Simply By Pasting The Url.
 This plugin does most of the work client side, and waits for the page to finish loading so embeds do not slow down your site.
 Shortcodes are not needed (but are available), just add a clickable link to the youtube video, and the plugin will find all the youtube.com and youtu.be links, and replace them with an embed.
 
-You know how sites like facebook and discord let you paste a youtube url, and an embed of the video shows up?
+You know how sites like discord let you paste a youtube url, and an embed of the video shows up?
 This plugin works kind of like that, while also working with playlists, live streams, channels, youtube search, etc.
 
 YouTube has an organized url system, and this plugin recognizes it.
@@ -71,6 +71,9 @@ Add "?min-width=(insert min width)&max-width=(insert max width)" to the url
 Any url that points to the current domain and ends with ".pdf" will automatically be seen as a pdf
 
 == Changelog ==
+
+= 1.5 =
+Removed Facebook Support For Leagal Reasons
 
 = 1.4.7 =
 Now ignores links inside headers and footers
