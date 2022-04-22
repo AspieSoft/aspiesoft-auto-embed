@@ -63,7 +63,6 @@ SOFTWARE.
 
     // exactType default settings (null to use above defaults)
     yt: null, // {width, min-width, max-width, ratio}
-    fb: {'width': '100%', 'min-width': '300px', 'max-width': '500px', 'ratio': '5:8'},
     pdf: {'width': '100%', 'min-width': '300px', 'max-width': '2500px', 'ratio': '9:12'},
     img: null, // {width, min-width, max-width, ratio}
   };
@@ -186,30 +185,6 @@ SOFTWARE.
       } else if(page.startsWith('embed/') && typeof embedUrlHandler['youtu.be'] === 'function') {
         return embedUrlHandler['youtu.be'](page.replace('embed/', ''), query);
       }
-    },
-
-    'facebook.com': function(page, query) {
-      if(page.includes('video')) {
-        //todo: embed facebook video
-        return;
-      }
-
-      let href;
-      if(page === 'plugins/page' || page === 'plugins/page.php') {
-        href = query.href;
-      } else {
-        page = page.split('/');
-        if(page[0] === 'page') {
-          href = `https%3A%2F%2Fwww.facebook.com%2F${page[1].toString().replace(/[^\w_\-$\.]/g, '')}%2F`;
-        } else {
-          href = `https%3A%2F%2Fwww.facebook.com%2F${page[0].replace(/[^\w_\-$\.]/g, '')}%2F`;
-        }
-      }
-
-      url = `https://www.facebook.com/plugins/page.php?href=${href}&tabs=timeline&width=500&height=800&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&appId`;
-      embedType = 'embed';
-      exactType = 'fb';
-      return {url, embedType, exactType};
     },
   };
 
