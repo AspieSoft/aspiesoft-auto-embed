@@ -86,13 +86,6 @@ if (!class_exists('AspieSoft_AutoEmbed_Settings')) {
 
       );
 
-
-      $this->addEmbedType('fb', 'Facebook', array(
-        'max-width' => '500',
-        'ratio' => array(5, 8),
-      ));
-
-
       $this->addEmbedType('pdf', 'PDF', array(
         'max-width' => '500',
         'ratio' => array(9, 12),
