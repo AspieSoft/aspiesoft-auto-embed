@@ -1,6 +1,6 @@
 === Auto Embed (YouTube, Facebook, PDF, Image, And More) ===
 Contributors: AspieSoft
-Tags: youtube, embed, auto, pdf, image, img, webP, dynamic, simple, lazy-load, css, facebook
+Tags: youtube, embed, auto, pdf, image, img, webP, dynamic, simple, lazy-load, css
 Requires at least: 3.0.1
 Tested up to: 5.9
 Stable tag: 1.4.10
