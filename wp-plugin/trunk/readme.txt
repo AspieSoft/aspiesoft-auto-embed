@@ -23,7 +23,7 @@ Every youtube playlist id starts with "PL", and youtube uses many other consiste
 
 Now supports local pdf embeds.
 
-This plugin allowes you to optionally load assets from cdn.jsdelivr.net, to improve performance and load the assets from the github repository of this plugin. By default, the plugin loads assets locally, but you can change this to use jsdelivr in the plugin settings.
+This plugin allowes you to optionally load assets from cdn.jsdelivr.net, to improve performance and load the assets from the github repository of this plugin. By default, the plugin loads assets locally, but you can change this to use jsdelivr in the plugin settings. When Enabled, The jsdelivr <a href="https://www.jsdelivr.com/terms/acceptable-use-policy-jsdelivr-net">Acceptable Use Policy</a> and <a href="https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net">Privacy Policy</a> Apply.
 
 == Installation ==
 
