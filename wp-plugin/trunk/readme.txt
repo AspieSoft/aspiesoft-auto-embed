@@ -104,6 +104,12 @@ Initial Commit
 
 == Upgrade Notice ==
 
+= 1.5.2 =
+Improved Lazy Loading
+
+= 1.5 =
+Removed Facebook Support For Leagal Reasons
+
 = 1.4.7 =
 Now ignores links inside headers and footers
 
