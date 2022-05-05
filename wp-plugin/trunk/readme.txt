@@ -3,7 +3,7 @@ Contributors: AspieSoft
 Tags: youtube, embed, auto, pdf, dynamic, simple, lazy-load, css
 Requires at least: 3.0.1
 Tested up to: 5.9
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 Requires PHP: 5.2.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -73,6 +73,9 @@ Add "?min-width=(insert min width)&max-width=(insert max width)" to the url
 Any url that points to the current domain and ends with ".pdf" will automatically be seen as a pdf
 
 == Changelog ==
+
+= 1.5.2 =
+Improved Lazy Loading
 
 = 1.5 =
 Removed Facebook Support For Leagal Reasons

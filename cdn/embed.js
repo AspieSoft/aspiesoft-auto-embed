@@ -38,6 +38,9 @@ SOFTWARE.
   })();
 
 
+  $('head').append('<link rel="dns-prefetch" href="https://www.youtube.com"/>');
+
+
   let defaultEmbedOptions = {
     'width': '90%',
     'min-width': '300px',
@@ -69,12 +72,12 @@ SOFTWARE.
 
 
   const embedUrlHandler = {
-    'localhost': function(page, query) {
+    'localhost': function(page, query, domain) {
       if(!page || page.trim() === '') {
         return;
       }
 
-      let url = window.location.origin + '/' + page;
+      let url = window.location.protocol + '//' + domain + '/' + page;
       let key = Object.keys(query);
       for(let i = 0; i < key.length; i++) {
         if(i === 0) {
@@ -96,8 +99,8 @@ SOFTWARE.
       }
     },
 
-    'simple-embed': function(page, query) {
-      let url = window.location.origin + '/' + page;
+    'simple-embed': function(page, query, domain) {
+      let url = window.location.protocol + '//' + domain + '/' + page;
 
       let key = Object.keys(query);
       for(let i = 0; i < key.length; i++) {
@@ -252,8 +255,11 @@ SOFTWARE.
       sel += ', ' + tagSel;
     }
     $(sel).each(async function() {
-      let elm = this;
+      if(window.location.search.toString().match(/[?&]fl_builder/)){
+        return;
+      }
 
+      let elm = this;
       if(elm.hasAttribute('auto-embed-checked') || elm.hasAttribute('ignore') || elm.classList.contains('aspiesoft-embed') || elm.classList.contains('aspiesoft-embed-content')) {
         return;
       } else {
@@ -503,12 +509,12 @@ SOFTWARE.
       let iframe = undefined;
       if(data.embedType === 'video') {
         data.url = data.url.replace(/\\?"/g, '\\"') + youtubeQueryAttrs;
-        iframe = $('<div class="aspiesoft-embed" doing-init-animation' + attrs + styles + '><iframe class="aspiesoft-embed-content" style="opacity: 0;" src="' + data.url + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>').insertAfter(elm);
+        iframe = $('<div class="aspiesoft-embed" doing-init-animation' + attrs + styles + '><iframe class="aspiesoft-embed-content" style="opacity: 0;" lazy-src="' + data.url + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>').insertAfter(elm);
       } else if(data.embedType === 'embed') {
-        iframe = $('<div class="aspiesoft-embed" doing-init-animation' + attrs + styles + '><iframe class="aspiesoft-embed-content" style="opacity: 0;" src="' + data.url + '" frameborder="0" allowfullscreen allow="encrypted-media" allowtransparency="true"></iframe></div>').insertAfter(elm);
+        iframe = $('<div class="aspiesoft-embed" doing-init-animation' + attrs + styles + '><iframe class="aspiesoft-embed-content" style="opacity: 0;" lazy-src="' + data.url + '" frameborder="0" allowfullscreen allow="encrypted-media" allowtransparency="true"></iframe></div>').insertAfter(elm);
         iframe.css('border-radius', '5px');
       } else if(data.embedType === 'image') {
-        iframe = $('<div class="aspiesoft-embed" doing-init-animation' + attrs + styles + '><img class="aspiesoft-embed-content" style="opacity: 0;" src="' + data.url + '"></div>').insertAfter(elm);
+        iframe = $('<div class="aspiesoft-embed" doing-init-animation' + attrs + styles + '><img class="aspiesoft-embed-content" style="opacity: 0;" lazy-src="' + data.url + '"></div>').insertAfter(elm);
       }
 
       if(!iframe) {
@@ -591,10 +597,10 @@ SOFTWARE.
         page = '';
       }
 
-      if(!domain || domain.trim() === '' || domain === window.location.hostname || window.location.hostname.endsWith(domain)) {
+      if(!domain || domain.trim() === '' || domain === window.location.hostname || window.location.hostname.endsWith(domain) || domain.endsWith(window.location.hostname.replace(/^www\./g, ''))) {
         // if local site
         if(typeof embedUrlHandler['localhost'] === 'function') {
-          let res = embedUrlHandler['localhost'](page, query);
+          let res = embedUrlHandler['localhost'](page, query, domain);
           if(!res) {
             url = false;
           } else if(typeof res === 'object') {
@@ -618,11 +624,11 @@ SOFTWARE.
         let res = undefined;
 
         if(typeof embedUrlHandler['localhost'] === 'function') {
-          res = embedUrlHandler['localhost'](page, query);
+          res = embedUrlHandler['localhost'](page, query, domain);
         }
 
         if(!res && typeof embedUrlHandler['simple-embed'] === 'function') {
-          res = embedUrlHandler['simple-embed'](page, query);
+          res = embedUrlHandler['simple-embed'](page, query, domain);
         }
 
         if(typeof res === 'object') {
@@ -658,5 +664,24 @@ SOFTWARE.
     }
     return {};
   }
+
+
+  function renderLazySrc(){
+    const windowOffset = $(window).scrollTop() + window.innerHeight + 500;
+    $('[lazy-src]').each(function(){
+      let offsetTop = $(this).offset().top;
+      if(offsetTop === 0){
+        return;
+      }
+
+      if(windowOffset > offsetTop){
+        $(this).attr('src', $(this).attr('lazy-src'));
+        this.removeAttribute('lazy-src');
+      }
+    });
+  }
+
+  renderLazySrc();
+  setInterval(renderLazySrc, 500);
 
 })();

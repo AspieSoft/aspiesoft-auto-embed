@@ -38,6 +38,9 @@ SOFTWARE.
   })();
 
 
+  $('head').append('<link rel="dns-prefetch" href="https://www.youtube.com"/>');
+
+
   let defaultEmbedOptions = {
     'width': '90%',
     'min-width': '300px',
@@ -506,12 +509,12 @@ SOFTWARE.
       let iframe = undefined;
       if(data.embedType === 'video') {
         data.url = data.url.replace(/\\?"/g, '\\"') + youtubeQueryAttrs;
-        iframe = $('<div class="aspiesoft-embed" doing-init-animation' + attrs + styles + '><iframe class="aspiesoft-embed-content" style="opacity: 0;" src="' + data.url + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>').insertAfter(elm);
+        iframe = $('<div class="aspiesoft-embed" doing-init-animation' + attrs + styles + '><iframe class="aspiesoft-embed-content" style="opacity: 0;" lazy-src="' + data.url + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>').insertAfter(elm);
       } else if(data.embedType === 'embed') {
-        iframe = $('<div class="aspiesoft-embed" doing-init-animation' + attrs + styles + '><iframe class="aspiesoft-embed-content" style="opacity: 0;" src="' + data.url + '" frameborder="0" allowfullscreen allow="encrypted-media" allowtransparency="true"></iframe></div>').insertAfter(elm);
+        iframe = $('<div class="aspiesoft-embed" doing-init-animation' + attrs + styles + '><iframe class="aspiesoft-embed-content" style="opacity: 0;" lazy-src="' + data.url + '" frameborder="0" allowfullscreen allow="encrypted-media" allowtransparency="true"></iframe></div>').insertAfter(elm);
         iframe.css('border-radius', '5px');
       } else if(data.embedType === 'image') {
-        iframe = $('<div class="aspiesoft-embed" doing-init-animation' + attrs + styles + '><img class="aspiesoft-embed-content" style="opacity: 0;" src="' + data.url + '"></div>').insertAfter(elm);
+        iframe = $('<div class="aspiesoft-embed" doing-init-animation' + attrs + styles + '><img class="aspiesoft-embed-content" style="opacity: 0;" lazy-src="' + data.url + '"></div>').insertAfter(elm);
       }
 
       if(!iframe) {
@@ -661,5 +664,24 @@ SOFTWARE.
     }
     return {};
   }
+
+
+  function renderLazySrc(){
+    const windowOffset = $(window).scrollTop() + window.innerHeight + 500;
+    $('[lazy-src]').each(function(){
+      let offsetTop = $(this).offset().top;
+      if(offsetTop === 0){
+        return;
+      }
+
+      if(windowOffset > offsetTop){
+        $(this).attr('src', $(this).attr('lazy-src'));
+        this.removeAttribute('lazy-src');
+      }
+    });
+  }
+
+  renderLazySrc();
+  setInterval(renderLazySrc, 500);
 
 })();
