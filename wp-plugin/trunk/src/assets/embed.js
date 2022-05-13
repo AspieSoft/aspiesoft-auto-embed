@@ -189,6 +189,16 @@ SOFTWARE.
         return embedUrlHandler['youtu.be'](page.replace('embed/', ''), query);
       }
     },
+
+    'docs.google.com': function(page) {
+      page = page.replace(/^document\/d\/([\w_-]+)\/.*$/, '$1');
+
+      return {
+        url: 'https://gdoc.aspiesoft.com/doc/' + page + '.pdf',
+        embedType: 'embed',
+        exactType: 'pdf',
+      };
+    },
   };
 
 
@@ -667,14 +677,14 @@ SOFTWARE.
 
 
   function renderLazySrc(){
-    const windowOffset = $(window).scrollTop() + window.innerHeight + 500;
+    const windowOffset = $(window).scrollTop() + window.innerHeight;
     $('[lazy-src]').each(function(){
       let offsetTop = $(this).offset().top;
       if(offsetTop === 0){
         return;
       }
 
-      if(windowOffset > offsetTop){
+      if(windowOffset > offsetTop - 500 && windowOffset < window.innerHeight + offsetTop + 500){
         $(this).attr('src', $(this).attr('lazy-src'));
         this.removeAttribute('lazy-src');
       }

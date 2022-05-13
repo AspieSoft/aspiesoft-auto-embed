@@ -3,7 +3,7 @@ Contributors: AspieSoft
 Tags: youtube, embed, auto, pdf, dynamic, simple, lazy-load, css
 Requires at least: 3.0.1
 Tested up to: 5.9
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 Requires PHP: 5.2.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -22,6 +22,7 @@ YouTube has an organized url system, and this plugin recognizes it.
 Every youtube playlist id starts with "PL", and youtube uses many other consistent url methods like this.
 
 Now supports local pdf embeds.
+Now supports google doc to pdf embeds.
 
 This plugin allowes you to optionally load assets from cdn.jsdelivr.net, to improve performance and load the assets from the github repository of this plugin. By default, the plugin loads assets locally, but you can change this to use jsdelivr in the plugin settings. When Enabled, The jsdelivr <a href="https://www.jsdelivr.com/terms/acceptable-use-policy-jsdelivr-net">Acceptable Use Policy</a> and <a href="https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net">Privacy Policy</a> Apply.
 
@@ -74,6 +75,9 @@ Any url that points to the current domain and ends with ".pdf" will automaticall
 
 == Changelog ==
 
+= 1.5.3 =
+Added Google Doc To PDF Support
+
 = 1.5.2 =
 Improved Lazy Loading
 
@@ -103,6 +107,9 @@ Added option to load scripts and styles from jsdelivr.net (can improve performan
 Initial Commit
 
 == Upgrade Notice ==
+
+= 1.5.3 =
+Added Google Doc To PDF Support
 
 = 1.5.2 =
 Improved Lazy Loading
