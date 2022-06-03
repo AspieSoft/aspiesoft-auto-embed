@@ -201,7 +201,7 @@ SOFTWARE.
     },
 
     'gdoc.aspiesoft.com': function(page) {
-      page = page.replace(/^doc\/([\w_-]+)(?:\/.*|)$/, '$1');
+      page = page.replace(/^doc\//, '').replace(/\.pdf$/, '');
 
       return {
         url: 'https://gdoc.aspiesoft.com/doc/' + page + '.pdf',
