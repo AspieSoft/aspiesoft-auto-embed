@@ -191,7 +191,17 @@ SOFTWARE.
     },
 
     'docs.google.com': function(page) {
-      page = page.replace(/^document\/d\/([\w_-]+)\/.*$/, '$1');
+      page = page.replace(/^document\/d\/([\w_-]+)(?:\/.*|)$/, '$1');
+
+      return {
+        url: 'https://gdoc.aspiesoft.com/doc/' + page + '.pdf',
+        embedType: 'embed',
+        exactType: 'pdf',
+      };
+    },
+
+    'gdoc.aspiesoft.com': function(page) {
+      page = page.replace(/^doc\/([\w_-]+)(?:\/.*|)$/, '$1');
 
       return {
         url: 'https://gdoc.aspiesoft.com/doc/' + page + '.pdf',
