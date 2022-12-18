@@ -194,7 +194,7 @@ SOFTWARE.
       page = page.replace(/^document\/d\/([\w_-]+)(?:\/.*|)$/, '$1');
 
       return {
-        url: 'https://gdoc.aspiesoft.com/doc/' + page + '.pdf',
+        url: 'https://gdoc.aspiesoft.com/doc/' + page + '.pdf?key=cc980d309adf012c6d114cbe1eed34bd73448d35facf64965f8324b1bcfd517f',
         embedType: 'embed',
         exactType: 'pdf',
       };
@@ -204,7 +204,7 @@ SOFTWARE.
       page = page.replace(/^doc\//, '').replace(/\.pdf$/, '');
 
       return {
-        url: 'https://gdoc.aspiesoft.com/doc/' + page + '.pdf',
+        url: 'https://gdoc.aspiesoft.com/doc/' + page + '.pdf?key=cc980d309adf012c6d114cbe1eed34bd73448d35facf64965f8324b1bcfd517f',
         embedType: 'embed',
         exactType: 'pdf',
       };

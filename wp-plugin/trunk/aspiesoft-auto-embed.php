@@ -6,7 +6,7 @@
 Plugin Name: Auto Embed
 Plugin URI: https://github.com/AspieSoft/aspiesoft-auto-embed
 Description: Easily Embed Dynamic Lazy Loading Youtube Videos And More Simply By Pasting The Url.
-Version: 1.5.6
+Version: 1.5.7
 Author: AspieSoft
 Author URI: https://www.aspiesoft.com
 License: GPLv2 or later
