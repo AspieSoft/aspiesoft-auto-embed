@@ -22,5 +22,3 @@ jobs:
           cp -Rf ../wp-plugin/trunk/* ./trunk
           svn add --force *
           svn resolve . --accept mine-full -R
-          svn update --accept mine-full
-          svn commit wp-plugin -m"${{github.event.release.name}}: ${{github.event.release.body}}" --username=${{secrets.SVN_USER}} --password=${{secrets.SVN_PASS}}
