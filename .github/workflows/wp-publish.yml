@@ -22,3 +22,4 @@ jobs:
           cp -Rf ../wp-plugin/trunk/* ./trunk
           svn add --force *
           svn resolve . --accept mine-full -R
+          svn update --accept mine-full
