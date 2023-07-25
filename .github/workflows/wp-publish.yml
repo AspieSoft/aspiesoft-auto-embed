@@ -14,7 +14,7 @@ jobs:
       - run: |
           sudo apt-get install -y subversion
           sudo chmod -R 775 wp-plugin
-          svn checkout --username=${{secrets.SVN_USER}} --password=${{secrets.SVN_PASS}} ${{secrets.SVN_URL}} --depth immediates tmp-svn
+          svn checkout --username=${{secrets.SVN_USER}} --password=${{secrets.SVN_PASS}} https://plugins.svn.wordpress.org/${{secrets.PLUGIN_NAME}} --depth immediates tmp-svn
           cd tmp-svn
           svn update --set-depth infinity assets
           svn update --set-depth infinity trunk
