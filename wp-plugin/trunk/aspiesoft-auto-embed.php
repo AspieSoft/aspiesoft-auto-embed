@@ -6,7 +6,7 @@
 Plugin Name: Auto Embed
 Plugin URI: https://github.com/AspieSoft/aspiesoft-auto-embed
 Description: Easily Embed Dynamic Lazy Loading Youtube Videos And More Simply By Pasting The Url.
-Version: 1.5.7
+Version: 1.5.8
 Author: AspieSoft
 Author URI: https://www.aspiesoft.com
 License: GPLv2 or later
@@ -122,8 +122,8 @@ if(!class_exists('AspieSoft_AutoEmbed')){
       // multiple plugins can use same file in the future (without functions.php class being loaded twice)
       // version added so updates to functions can still occur without breaking other plugins
       require_once(plugin_dir_path(__FILE__).'functions.php');
-      global $aspieSoft_Functions_v1_3;
-      self::$func = $aspieSoft_Functions_v1_3;
+      global $AspieSoft_Functions_v1_4;
+      self::$func = $AspieSoft_Functions_v1_4;
 
       self::$options = self::$func::options($this->plugin);
       self::$optionsGlobal = self::$func::options(array('setting' => 'global'));
@@ -163,14 +163,14 @@ if(!class_exists('AspieSoft_AutoEmbed')){
       if(file_exists(plugin_dir_path(__FILE__).'src/settings.php')){
         $this->enableOptionsAutoload();
       }
-      //flush_rewrite_rules();
+      flush_rewrite_rules();
     }
 
     public function deactivate(){
       if(file_exists(plugin_dir_path(__FILE__).'src/settings.php')){
         $this->disableOptionsAutoload();
       }
-      //flush_rewrite_rules();
+      flush_rewrite_rules();
     }
 
     function enableOptionsAutoload(){

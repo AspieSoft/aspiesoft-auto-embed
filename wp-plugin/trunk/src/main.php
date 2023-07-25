@@ -20,8 +20,8 @@ if(!class_exists('AspieSoft_AutoEmbed_Main')){
       // get plugin data and load common functions
       $this->plugin = $pluginData;
       require_once(plugin_dir_path(__FILE__).'../functions.php');
-      global $aspieSoft_Functions_v1_3;
-      self::$func = $aspieSoft_Functions_v1_3;
+      global $AspieSoft_Functions_v1_4;
+      self::$func = $AspieSoft_Functions_v1_4;
       self::$options = self::$func::options($this->plugin);
     }
 
@@ -36,12 +36,12 @@ if(!class_exists('AspieSoft_AutoEmbed_Main')){
       add_shortcode('auto-embed', array($this, 'shortcode_Embed'));
 
       $altShortcode_default = self::$options['get']('altShortcode_default');
-      if($altShortcode_default && $altShortcode_default !== null){
+      if(isset($altShortcode_default)){
         add_shortcode($altShortcode_default, array($this, 'shortcode_Embed'));
       }
 
       $altShortcode = self::$options['get']('altShortcode');
-      if($altShortcode && $altShortcode !== null){ // add custom shortcode from settings, if it exists
+      if(isset($altShortcode)){ // add custom shortcode from settings, if it exists
         add_shortcode($altShortcode, array($this, 'shortcode_YoutubeEmbed'));
       }
     }

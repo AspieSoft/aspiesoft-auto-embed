@@ -5,9 +5,9 @@ if(!defined('ABSPATH')){
   die('404 Not Found');
 }
 
-if(!class_exists('AspieSoft_Functions_v1_3')){
+if(!class_exists('AspieSoft_Functions_v1_4')){
 
-  class AspieSoft_Functions_v1_3{
+  class AspieSoft_Functions_v1_4{
 
     public static function startsWith($haystack, $needle){
       return substr_compare($haystack, $needle, 0, strlen($needle)) === 0;
@@ -53,7 +53,7 @@ if(!class_exists('AspieSoft_Functions_v1_3')){
         return $attr;
       }
       foreach($attr as $v){
-        if($v !== null){
+        if(isset($v)){
           return $v;
         }
       }
@@ -102,13 +102,13 @@ if(!class_exists('AspieSoft_Functions_v1_3')){
       $option = null;
       if(is_multisite()){
         $option = sanitize_text_field(get_option($name));
-        if(!isset($option) || !$option || $option === null || $option === ''){
+        if(!isset($option) || $option === ''){
           $option = sanitize_text_field(get_site_option($name));
         }
       }else{
         $option = sanitize_text_field(get_option($name));
       }
-      if(!isset($option) || !$option || $option === null || $option === ''){
+      if(!isset($option) || $option === ''){
         $option = $default;
       }
 
@@ -185,7 +185,7 @@ if(!class_exists('AspieSoft_Functions_v1_3')){
         $name = sanitize_text_field($name);
         if($onActivation){
           $value = self::options_get($plugin, $name, null, false);
-          if($value && $value !== null){
+          if(isset($value)){
             // twice with name change to force update
             self::options_set($plugin, $name, 'autoload:'.$value, $global, $autoload);
             self::options_set($plugin, $name, $value, $global, $autoload);
@@ -204,7 +204,7 @@ if(!class_exists('AspieSoft_Functions_v1_3')){
 
   }
 
-  global $aspieSoft_Functions_v1_3;
-  $aspieSoft_Functions_v1_3 = new AspieSoft_Functions_v1_3();
+  global $AspieSoft_Functions_v1_4;
+  $AspieSoft_Functions_v1_4 = new AspieSoft_Functions_v1_4();
 
 }

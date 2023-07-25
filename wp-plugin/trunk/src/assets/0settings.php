@@ -24,8 +24,8 @@ if (!class_exists('AspieSoft_AutoEmbed_AssetSettings')) {
     public function init($pluginData) {
       $this->plugin = $pluginData;
       require_once(plugin_dir_path(__FILE__) . '../../functions.php');
-      global $aspieSoft_Functions_v1_3;
-      self::$func = $aspieSoft_Functions_v1_3;
+      global $AspieSoft_Functions_v1_4;
+      self::$func = $AspieSoft_Functions_v1_4;
     }
 
 

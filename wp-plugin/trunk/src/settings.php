@@ -24,16 +24,16 @@ if (!class_exists('AspieSoft_AutoEmbed_Settings')) {
         'ratio' => array(16, 9),
       );
       if (is_array($default)) {
-        if ($default['width'] !== null) {
+        if (isset($default['width'])) {
           $sizes['width'] = $default['width'];
         }
-        if ($default['min-width'] !== null) {
+        if (isset($default['min-width'])) {
           $sizes['min-width'] = $default['min-width'];
         }
-        if ($default['max-width'] !== null) {
+        if (isset($default['max-width'])) {
           $sizes['max-width'] = $default['max-width'];
         }
-        if ($default['ratio'] !== null) {
+        if (isset($default['ratio'])) {
           $sizes['ratio'] = $default['ratio'];
         }
       }

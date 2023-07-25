@@ -32,7 +32,20 @@ if(!class_exists('AspieSoft_Settings')){
       if(isset($_POST['UpdateOptions'])){ // if post request, update options
 
         // unique identifier to allow multiple sessions
-        $computerId = hash('sha256', sanitize_text_field($_SERVER['HTTP_USER_AGENT']).sanitize_text_field($_SERVER['LOCAL_ADDR']).sanitize_text_field($_SERVER['LOCAL_PORT']).sanitize_text_field($_SERVER['REMOTE_ADDR']));
+        $computerId = '';
+        if(isset($_SERVER['HTTP_USER_AGENT'])){
+          $computerId .= sanitize_text_field($_SERVER['HTTP_USER_AGENT']);
+        }
+        if(isset($_SERVER['LOCAL_ADDR'])){
+          $computerId .= sanitize_text_field($_SERVER['LOCAL_ADDR']);
+        }
+        if(isset($_SERVER['LOCAL_PORT'])){
+          $computerId .= sanitize_text_field($_SERVER['LOCAL_PORT']);
+        }
+        if(isset($_SERVER['REMOTE_ADDR'])){
+          $computerId .= sanitize_text_field($_SERVER['REMOTE_ADDR']);
+        }
+        $computerId = hash('sha256', $computerId);
 
         // verify session token
         $settingsToken = get_option('AspieSoft_Settings_Token'.$computerId);
@@ -171,8 +184,8 @@ if(!class_exists('AspieSoft_Settings')){
 
       // load common functions
       require_once(plugin_dir_path(__FILE__).'../functions.php');
-      global $aspieSoft_Functions_v1_3;
-      self::$func = $aspieSoft_Functions_v1_3;
+      global $AspieSoft_Functions_v1_4;
+      self::$func = $AspieSoft_Functions_v1_4;
     }
 
   }
