@@ -18,4 +18,5 @@ jobs:
           svn update wp-plugin/* --accept mine-full
           svn merge wp-plugin --accept mine-full
           svn resolve wp-plugin --accept working -R
+          svn up --resolve mine-full
           svn commit wp-plugin -m"${{github.event.release.name}}: ${{github.event.release.body}}" --username=${{secrets.SVN_USER}} --password=${{secrets.SVN_PASS}}
