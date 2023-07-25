@@ -13,11 +13,8 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           sudo apt-get install -y subversion
-          mkdir tmp-svn
-          cd tmp-svn
-          svn checkout --username=${{secrets.SVN_USER}} --password=${{secrets.SVN_PASS}} ${{secrets.SVN_URL}}
-          cp -fR ../wp-plugin/* .
-          svn add * --force
-          svn update * --accept mine-full
-          svn resolve . --accept working -R
-          svn commit -m"${{github.event.release.name}}: ${{github.event.release.body}}" --username=${{secrets.SVN_USER}} --password=${{secrets.SVN_PASS}}
+          svn checkout --username=${{secrets.SVN_USER}} --password=${{secrets.SVN_PASS}} ${{secrets.SVN_URL}} wp-plugin --depth empty
+          svn add --force wp-plugin/*
+          svn update wp-plugin/* --accept mine-full
+          svn resolve wp-plugin --accept mine-full -R
+          svn commit wp-plugin -m"${{github.event.release.name}}: ${{github.event.release.body}}" --username=${{secrets.SVN_USER}} --password=${{secrets.SVN_PASS}}
