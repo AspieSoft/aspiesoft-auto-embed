@@ -14,6 +14,9 @@ jobs:
       - run: |
           sudo apt-get install -y subversion
           sudo chmod -R 775 wp-plugin
-          svn checkout --username=${{secrets.SVN_USER}} --password=${{secrets.SVN_PASS}} ${{secrets.SVN_URL}} wp-plugin --depth empty
-          svn add --force wp-plugin/*
-          svn resolve wp-plugin --accept mine-full -R
+          cd wp-plugin
+          svn checkout --username=${{secrets.SVN_USER}} --password=${{secrets.SVN_PASS}} ${{secrets.SVN_URL}} . --depth empty
+          svn add --force *
+          svn resolve . --accept mine-full -R
+          svn update
+          svn commit . -m"${{github.event.release.name}}: ${{github.event.release.body}}" --username=${{secrets.SVN_USER}} --password=${{secrets.SVN_PASS}}
